@@ -1,0 +1,273 @@
+<style id="global-css-vars" data-otid="ba22326d40dbd392ea828ea3848766ad">
+{%- liquid
+# Body 
+    assign bodyFontFamily = settings.bodyFontFamily
+
+    assign bodyFontBold = bodyFontFamily | font_modify: 'weight', 'bold'
+    assign bodyFontItalic = bodyFontFamily | font_modify: 'style', 'italic'
+    assign bodyFontBoldItalic = bodyFontBold | font_modify: 'style', 'italic'
+
+# Headings
+    assign headingsFontFamily = settings.headingsFontFamily
+
+    assign headingsFontFamilyBold = headingsFontFamily | font_modify: 'weight', 'bold'
+    assign headingsFontFamilyItalic = headingsFontFamily | font_modify: 'style', 'italic'
+    assign headingsFontFamilyBoldItalic = headingsFontFamilyBold | font_modify: 'style', 'italic' 
+
+# Fonts
+    echo bodyFontFamily | font_face: font_display: 'swap'
+    echo bodyFontBold | font_face: font_display: 'swap'
+    echo bodyFontItalic | font_face: font_display: 'swap'
+    echo bodyFontBoldItalic | font_face: font_display: 'swap'
+
+    echo headingsFontFamily | font_face: font_display: 'swap'
+    echo headingsFontFamilyBold | font_face: font_display: 'swap'
+    echo headingsFontFamilyItalic | font_face: font_display: 'swap'
+    echo headingsFontFamilyBoldItalic | font_face: font_display: 'swap'
+-%}
+
+:root {
+    --hFontFamily: var(--fontFamily);
+    --fontWeight: 400;
+    --fontStyle: normal;
+    --hWeight: 600;
+    --hStyle: normal;
+
+    --bgColor: {{ settings.bgColor }};
+    --bgColorOpacity: {{ settings.bgColor | color_modify: 'alpha', 0.85 }};
+    --primary: {{ settings.color }};
+    --plyr-color-main: var(--primary);
+    --plyr-video-background: transparent;
+
+    --iconSize: var(--fontSize);
+
+    --color: {{ settings.color }};
+    --linkColor: {{ settings.linkColor }};
+    --linkHover: {{ settings.linkHover }};
+
+    --buttonBgColor: {{ settings.buttonBgColor }};
+    --buttonColor: {{ settings.buttonColor }};
+    --buttonBorderColor: {{ settings.globalBorderColor }};
+    --buttonBorderHover: {{ settings.globalBorderColor }};
+    --buttonTransform: {{ settings.buttonTransform }};
+    --buttonWeight: {{ settings.buttonWeight }};
+    --buttonAlign: {{ settings.buttonAlign }};
+
+    --buyButtonBgColor: {{ settings.buyButtonBgColor }};
+    --buyButtonBorderColor: {{ settings.globalBorderColor }};
+    --buyButtonBorderHover: {{ settings.globalBorderColor }};
+    --buyButtonColor: {{ settings.buyButtonColor }};
+    --buttonBorderWidth: {{ settings.globalBorderWidth }}px;
+
+    --boxBgColor: {{ settings.boxBgColor }};
+    --boxPlaceholderColor: {{ settings.boxColor }};
+    {%- liquid 
+        if settings.boxBorderColorGlobal 
+            assign boxBorderColor = settings.globalBorderColor
+        else
+            assign boxBorderColor = settings.boxBorderColor
+        endif     
+    -%}
+
+    --boxBorderColor: {{ boxBorderColor }};
+    --boxBorderHover: {{ boxBorderColor }};
+    --boxBorderActive: {{ boxBorderColor }};
+
+    --boxColor: {{ settings.boxColor }};
+    --boxBorderWidth: {{ settings.globalBorderWidth }}px;
+
+    --boxTransform: {{ settings.boxTransform }};
+    --boxAlign: {{ settings.boxAlign }};
+
+    --cardBg: {{ settings.cardBg }};
+    --cardColor: {{ settings.cardColor }};
+    --cardTextBg: {{ settings.cardTextBg }};
+
+    --globalBorderColor: {{ settings.globalBorderColor }};
+    --globalBorderWidth: {{ settings.globalBorderWidth }}px;
+    --globalBorder: var(--globalBorderWidth) solid var(--globalBorderColor);
+
+    --radius: {{ settings.BorderRadiusGlobal }};
+    --radius-2: {% if settings.BorderRadiusGlobal == '5rem' %}1rem{%- else -%}{{ settings.BorderRadiusGlobal }}{%- endif -%};
+    --radiusImg: {{ settings.globalImgRadius }};
+
+    --globalShadow: 0 0 15px rgba(0,0,0,0.25);
+    --globalTransparentBg: {{ settings.bgColor | color_modify: 'alpha', 0.9 }};
+
+    --buttonRadius: var(--radius);
+    --padding: 2rem;
+    --boxPadding: 1.4rem;
+    --boxRadius: var(--radius);
+    --buttonPadding: 1.4rem;
+    --rowGap: 0;
+    --columnGap: 0;
+
+    --logoSize: 1.8rem;
+    --headerHeight: auto;
+
+    --fontSizeBase: {{ settings.fontSize | divided_by: 100.0 }};
+    --fontSize: calc(var(--fontSizeBase) * 1.4rem);
+
+    --colorHeadings: {{ settings.colorHeadings }};
+    --hSizeBase: {{ settings.hSize | times: 1.0 | divided_by: settings.fontSize }};
+    --hSize: calc(var(--hSizeBase) * 1.6rem);
+    --h1Size: var(--hSize);
+    --h2Size: var(--hSize);
+    --h3Size: var(--hSize);
+    --h4Size: var(--hSize);
+    --h5Size: var(--hSize);
+    --h6Size: var(--hSize);
+
+    --hLine: 1.4;
+    --h1Line: var(--hLine);
+    --h2Line: var(--hLine);
+    --h3Line: var(--hLine);
+    --h4Line: var(--hLine);
+    --h5Line: var(--hLine);
+    --h6Line: var(--hLine);
+
+    --fontFamily: {{ bodyFontFamily.family }}, {{ bodyFontFamily.fallback_families }};
+    --fontWeight: {{ bodyFontFamily.weight }};
+    --fontStyle: {{ bodyFontFamily.style }};
+
+    --hFontFamily: {{ headingsFontFamily.family }}, {{ headingsFontFamily.fallback_families }};
+    --hWeight: {{ headingsFontFamily.weight }};
+    --hStyle: {{ headingsFontFamily.style }};
+    --hTxTransform: {{ settings.hTxTransform }};
+
+    --boxedLayoutMaxWidth: {{ settings.boxedLayoutWidth }}px;
+
+    --cardRatioCustom: {{ settings.cardRatioCustom }}%;
+
+    --a11yWidth: calc(var(--globalBorderWidth) * 1);
+    --a11yOffset: calc(var(--globalBorderWidth) * 3);
+    --a11yColor: var(--globalBorderColor);
+    --a11yOutline: var(--a11yWidth) solid var(--a11yColor);
+    --a11yShadow: 0 0 0 var(--a11yWidth), 0 0 0 var(--a11yOffset) var(--a11yColor);
+}
+
+{%- if settings.fadeOutCont -%}body:is(.open-cart,.open-search) :where(main,#shopify-section-footer) { opacity: 0.04; pointer-events: none; }{%- endif -%}
+
+img,video,iframe:not([title="reCAPTCHA"]),.lazyframe,.plyr__video-wrapper { border-radius: var(--radiusImg) }
+
+body.ip--padding :where(img,video,.lazyframe,.plyr__video-wrapper) { transform: scale(0.98) }
+body.ip--margin :where(img,video,.lazyframe,.plyr__video-wrapper)  { transform: scale(0.99) }
+@media (max-width: 777px) { 
+    body.ip--padding :where(img,video,.lazyframe,.plyr__video-wrapper) { transform: scale(0.97) } 
+    body.ip--margin :where(img,video,.lazyframe,.plyr__video-wrapper)  { transform: scale(0.98) } 
+}
+
+{%- # Dropdown carets -%}
+summary.dropdown-caret::-webkit-details-marker { display:none }
+.dropdown-caret { --caretSize: 6px; width: 100%; list-style: none; display: flex; align-items: center; justify-content: space-between; gap: .7rem; user-select: none }
+
+{%- case settings.caretType -%}
+{%- # Dropdown OG caret -%}
+{%- when 'caret' -%}
+    .dropdown-caret::after {
+        content: "";
+        display: inline-block;
+        width: 0;
+        height: 0;
+        vertical-align: middle;
+        border-style: solid;
+        border-width: var(--caretSize) var(--caretSize) 0;
+        border-right-color: transparent;
+        border-bottom-color: transparent;
+        border-left-color: transparent;
+    }
+
+    details[open] > summary.dropdown-caret::after,
+    .dropdown-caret[aria-expanded="true"]::after { transform: rotate(180deg) }
+
+{%- # Dropdown Arrow caret -%}
+{%- when 'arrow' -%}
+    .dropdown-caret::after {
+        content: "";
+        display: inline-block;
+        width: var(--caretSize);
+        height: var(--caretSize);
+        vertical-align: middle;
+        border-block-start: 2px solid currentColor;
+        border-inline-start: 2px solid currentColor;
+        transform: rotate(225deg) translateY(3px);
+    }
+    [dir="rtl"] .dropdown-caret::after { transform: rotate(136deg) translateY(3px) }
+
+    details[open] > summary.dropdown-caret::after,
+    .dropdown-caret[aria-expanded="true"]::after { transform: rotate(45deg) translate(4px, 1px) }
+    [dir="rtl"] .dropdown-caret[aria-expanded="true"]::after { transform: rotate(314deg) translate(4px, 1px) }
+    
+
+{% # Dropdown DOT caret -%}
+{%- when 'dot' -%}
+    .dropdown-caret::after {
+        content: "";
+        display: inline-block;
+        width: var(--caretSize);
+        height: var(--caretSize);
+        border-width: 1px;
+        border-style: solid;
+        border-color: none;
+        background-color: currentColor;
+        border-radius: 100vw;
+        vertical-align: middle;
+    }
+
+    details[open] > summary.dropdown-caret::after,
+    .dropdown-caret[aria-expanded="true"]::after { background: transparent; border-color: currentColor }
+{%- endcase -%}
+
+{%- if settings.boxedLayout -%}
+@media (min-width: {{ settings.boxedLayoutWidth }}px) { #app { max-width: var(--boxedLayoutMaxWidth); margin: 0 auto; border-inline: var(--globalBorder) } }
+{%- endif -%}
+@media (max-width: 777px) { 
+  :root { 
+    --fontSize: 1.4rem;
+    --iconSize: var(--fontSize);
+    --hSize: 1.6rem;
+    --h1Size: var(--hSize);
+    --h2Size: var(--hSize);
+    --h3Size: var(--hSize);
+    --h4Size: var(--hSize);
+    --h5Size: var(--hSize);
+    --h6Size: var(--hSize);
+  }
+}
+
+{%- comment %} Coretex dialog {% endcomment -%}
+.coretex-dialog {
+    --dialogBg: var(--bgColor);
+    --dialogColor: var(--color);
+        --hColor: var(--dialogColor);
+    --dialogRadius: calc(var(--radius) / 3);
+    --dialogW: calc(100% - var(--dialogMargin));
+    --dialogMaxW: 500px;
+    --dialogH: 600px;
+    --dialogMaxH: calc(100vh - (var(--margin) * 2));
+    --dialogBorder: var(--globalBorder);
+    --dialogPadding: var(--padding);
+    --dialogMargin: auto;
+
+    --dialogSize: inherit;
+    --hSize: var(--dialogSize);
+
+    --dialogAnimationOpen: fadeIn 150ms ease forwards;
+    --dialogAnimationClose: fadeOut 150ms ease forwards;
+    --dialogTransOrigin: center;
+}
+
+{% capture dialog_backdrop -%}
+    --dialogBackdropBg: {{ settings.bgColor | color_modify: 'alpha', 0.9 }};
+    --dialogBackdropBlur: none;
+    --dialogBackdropAnimationIn: fadeIn 100ms ease forwards;
+    --dialogBackdropAnimationOut: fadeOut 100ms ease forwards;
+    pointer-events: all;
+{%- endcapture -%}
+
+.coretex-dialog dialog::-webkit-backdrop { {{ dialog_backdrop }} }
+.coretex-dialog dialog::backdrop { {{ dialog_backdrop }} }
+
+@keyframes fadeIn { 0% { opacity: 0 } 100% { opacity: 1 } }
+@keyframes fadeOut { from { opacity: 1 } to { opacity: 0 } }
+</style>

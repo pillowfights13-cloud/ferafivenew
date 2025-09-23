@@ -1,0 +1,554 @@
+{%- liquid
+    assign id_append = ''
+    if featured_product
+    	assign sectionId = section.id | remove: '-' | remove: '_' 
+        assign id_append = sectionId
+    endif
+-%}
+
+{%- case block.type -%}
+{%- when '@app' -%}
+    <section class="itsapp" {{ block.shopify_attributes }}>{%- render block -%}</section>
+
+{%- when 'liquid' -%}
+    <section class="itsapp" {{ block.shopify_attributes }}>{{- block.settings.liquid -}}</section>
+
+{%- when 'separator' -%}
+    <horizontal-rule {{ block.shopify_attributes }}></horizontal-rule>
+
+{%- when 'vendor' -%}
+    <section class="vendor" {{ block.shopify_attributes }}>{{ product.vendor | link_to_vendor: class: 'no-style' }}</section>
+
+{%- when 'title' -%}
+    <section class="title" id="xtitle{{ id_append }}" {{ block.shopify_attributes }}>
+		{%- unless featured_product -%}
+    		<h1>{{ product.title }}</h1>
+    	{%- else -%}
+    		<h2 class="h1"><a href="{{ product.url }}" class="no-style">{{ product.title }}</a></h2>
+    	{%- endunless-%}
+    </section>
+
+{%- when 'subtitle' -%}
+	{%- if product.metafields.descriptors.subtitle.value != nil -%}
+    <section class="subtitle" {{ block.shopify_attributes }}><h3 class="h5">{{ product.metafields.descriptors.subtitle.value }}</h3></section>
+	{%- endif -%}
+
+{%- when 'description' -%}
+	{%- if product.description != blank -%}
+	<section class="description" {{ block.shopify_attributes }}>
+		{%- if block.settings.collapsibleDesc -%}
+		<details {% if block.settings.checked == true %}open{% endif %}>
+		<summary class="dropdown-caret">{{ block.settings.heading }}</summary>
+		{%- endif -%}
+			{%- if product.description != blank -%}<div class="text rte">{{ product.description }}</div>{%- endif -%}
+		{%- if block.settings.collapsibleDesc -%}</details>{%- endif -%}
+	</section>
+
+	{%- if block.settings.collapsibleDesc -%}<script type="module">document.addEventListener("DOMContentLoaded", () => { if(!CSS.supports('selector(html:has(body))')) { let parents = document.querySelectorAll('.description'); parents.forEach(function(parent) { let child = parent.querySelector('details'); if (child !== null) parent.classList.add('noHas') }) } })</script>{%- endif -%}
+	{%- endif -%}
+
+{%- when 'text' -%}
+	{%- if block.settings.text != blank -%}
+	<section class="text" {{ block.shopify_attributes }}>
+		<div class="rte">{{- block.settings.text -}}</div>
+	</section>
+	{%- endif -%}
+
+{%- when 'share' -%}
+	<section class="sharing" {{ block.shopify_attributes }}>
+        <share-button id="Share-{{ section.id }}" x-flex jc="between">
+            {%- assign share_link = product.selected_variant.url | default: product.url | prepend: request.origin -%}
+            <input type="text" id="ShareUrl-{{ section.id }}" value="{{ share_link }}" onclick="this.select();" readonly hidden>
+
+			{%- if block.settings.heading != blank -%}<x-cell>{{ block.settings.heading }}</x-cell>{%- endif -%}
+			<x-cell>
+				<div class="mob-scroller">
+				{%- liquid
+					assign share_image = product.selected_or_first_available_variant.featured_media.preview_image | default: product.featured_media.preview_image
+					render 'global-share', shareTitle: product.title, shareUrl: share_link, shareImage: share_image
+				-%}
+				</div>
+			</x-cell>
+        </share-button>
+	</section>
+
+{%- when 'paymenticons' -%}
+	{%- if shop.enabled_payment_types != empty -%}
+	<section class="paymenticons" {{ block.shopify_attributes }}>
+		<x-flex jc="between" wrap="wrap" style="--rowGap:var(--margin)">
+			{%- if block.settings.heading != blank -%}<x-cell>{{ block.settings.heading }}</x-cell>{%- endif -%}
+			<x-cell {% if block.settings.monoPaymentIcons -%}style="filter:grayscale(1)"{%- endif %}>
+				<div class="mob-scroller" style="gap:var(--margin)">{%- render 'global-paymenticons' -%}</div>
+			</x-cell>
+		</x-flex>
+    </section>
+    {%- endif -%}
+
+{%- when 'trustbadge' -%}
+	{%- if block.settings.image != empty -%}
+	<section class="trustbadge" {{ block.shopify_attributes }}>
+		{%- liquid 
+			assign img = block.settings.image
+			if img != nil
+				echo "<picture>"
+            	echo img | image_url: width: 900 | image_tag: loading: 'lazy', alt: img.alt
+            	echo "</picture>"
+        	else
+            	echo 'lifestyle-2' | placeholder_svg_tag: 'svg-placeholder'
+        	endif 
+        -%}
+	</section>
+	{%- endif -%}
+
+{%- when 'collapsible_tab' -%}
+	{%- if block.settings.content != empty or block.settings.page.content != nil or block.settings.image != empty or block.settings.liquid != empty -%}
+	<section class="accordion" {{ block.shopify_attributes }}>
+		<details {% if block.settings.checked == true %}open{% endif %}>
+			<summary class="dropdown-caret">{{ block.settings.heading | default: block.settings.page.title }}</summary>
+			<div class="text rte">
+				{%- liquid
+					echo block.settings.content
+					echo block.settings.page.content
+                    echo block.settings.liquid
+
+					assign img = block.settings.image
+					assign alt = block.settings.heading | default: block.settings.page.title
+					if block.settings.image != nil
+						echo img | image_url: width: 2048 | image_tag: loading: 'lazy', alt: alt
+					endif
+				-%}
+			</div>
+		</details>
+	</section>
+	{%- endif -%}
+
+{%- when 'popup' -%}
+	<section class="popup" {{ block.shopify_attributes }}>
+		<modal-opener data-modal="#PopupModal-{{ block.id }}">
+			<button id="ProductPopup-{{ block.id }}" class="is-blank no-js-hidden" type="button" aria-haspopup="dialog">{{ block.settings.link_label | default: block.settings.page.title }}</button>
+			<a href="{{ block.settings.page.url }}" class="button is-blank no-js">{{ block.settings.link_label }}</a>
+		</modal-opener>
+	</section>
+
+{%- when 'sku' -%}
+    <section 
+    	class="product__sku no-js-hidden {% if product.selected_or_first_available_variant.sku.size == 0 %} visually-hidden{% endif %}"
+    	id="Sku-{{ section.id }}"
+    	role="status"
+    	{{ block.shopify_attributes }}
+    >
+        <x-flex style="gap:var(--margin)">
+            <x-cell><strong>{{ 'product.sku' | t }}:</strong></x-cell>
+            <x-cell>{{- product.selected_or_first_available_variant.sku -}}</x-cell>
+        </x-flex>
+    </section>
+
+{%- when 'price' -%}
+	{%- liquid
+		assign showPrice = true
+		if product.available == false and block.settings.hidePriceSold == true
+			assign showPrice = false
+		endif
+	-%}
+	{%- if showPrice -%}
+		<section id="price-{{ section.id }}" {{ block.shopify_attributes }}>
+			{%- render 'product-price', product: product, use_variant: true -%}
+
+            {%- if cart.taxes_included or cart.duties_included or shop.shipping_policy.body != blank -%}
+                <small x-flex wrap-s="wrap" class="productTax" style="gap:var(--margin)">
+                    {%- liquid 
+                        if cart.duties_included and cart.taxes_included
+                            echo 'product.duties_and_taxes_included' | t | prepend: '<x-cell>' | append: '</x-cell>'
+                        elsif cart.taxes_included 
+                            echo 'product.taxes_included' | t | prepend: '<x-cell>' | append: '</x-cell>'
+                        elsif cart.duties_included
+                            echo 'product.duties_included' | t | prepend: '<x-cell>' | append: '</x-cell>'
+                        endif 
+
+                        if shop.shipping_policy.body != blank
+                            echo 'product.shipping_policy_html' | t: link: shop.shipping_policy.url | prepend: '<x-cell>' | append: '</x-cell>'
+                        endif 
+                    -%}
+                </small>
+            {%- endif -%}
+		</section>
+
+		<section class="installments" {{ block.shopify_attributes }}>
+            {%- assign product_form_installment_id = 'product-form-installment-' | append: section.id -%}
+            {%- form 'product', product, id: product_form_installment_id, class: 'installment' -%}
+              <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+              {{ form | payment_terms }}
+            {%- endform -%}
+		</section>
+	{%- endif -%}
+
+{%- when 'variant_picker' -%}
+
+    {%- unless product.has_only_default_variant -%}
+        <section class="variant-picker" {{ block.shopify_attributes }}>
+            {%- render 'product-variant-picker',
+                product: product,
+                block: block,
+                product_form_id: product_form_id
+            -%}
+        </section>
+    {%- endunless -%}
+
+{%- when 'buy_buttons' -%}
+	{%- liquid
+        # Add to cart button text
+        unless product.tags contains 'preorder'
+            assign purchaseButtonText = 'product.addToCart' | t 
+        else
+            assign purchaseButtonText = 'product.preorder' | t
+        endunless
+    -%}
+
+	{%- unless featured_product -%}
+		{%- if product.available and block.settings.floatButtonShow -%}
+			<style>#xpurchase { scroll-margin-top: calc(var(--headerGroupHeight, 100px) + 1rem) }</style>
+			<div id="add2cart-cta">
+				<a href="#xpurchase" class="button fullwidth is-primary" tabindex="-1">
+					<x-flex jc="center" style="gap:var(--margin)">
+						{%- if block.settings.floatButtonShowPrice -%}
+						<x-cell class="large-only mdash">{%- render 'product-price', product: product, use_variant: false -%}</x-cell>
+						{%- endif -%}
+						<x-cell>{{ purchaseButtonText }}</x-cell>
+					</x-flex>
+				</a>
+			</div>
+
+			<script>document.addEventListener("DOMContentLoaded", () => { inViewport('[data-inviewport]', element => { if (!element.isIntersecting) { document.querySelector('#add2cart-cta').classList.add('active') } else { document.querySelector('#add2cart-cta').classList.remove('active') } }) }); 
+			</script>
+		{%- endif -%}
+	{%- endunless -%}
+
+	<section class="product-form" id="xpurchase{{ id_append }}" {{ block.shopify_attributes }}>
+        {%- liquid
+            # Check if product has preorder tag.
+            assign pre_order = false
+            if product.tags contains 'preorder'
+                assign pre_order = true
+            endif
+            
+            # Check if gift card recipient feature is active.
+            assign gift_card_recipient_feature_active = false
+            if block.settings.show_gift_card_recipient and product.gift_card?
+                assign gift_card_recipient_feature_active = true
+            endif
+            
+            # Check if dynamic checkout buttons should be shown.
+            # If gift card recipient feature is active, dynamic checkout buttons are not shown.
+            # If preorder is active, dynamic checkout buttons are not shown.
+            assign show_dynamic_checkout = false
+            if block.settings.show_dynamic_checkout and gift_card_recipient_feature_active == false and pre_order == false
+                assign show_dynamic_checkout = true
+            endif
+        -%}
+
+		<product-form 
+            class="product-form" 
+            data-inviewport
+            data-hide-errors="{{ gift_card_recipient_feature_active }}"
+            data-section-id="{{ section.id }}"
+        >
+
+			<div class="product-form__error-message-wrapper" role="alert" hidden><span class="product-form__error-message"></span></div>
+
+			{%- if settings.cart_type != 'page' -%}
+            <ajax-cart-product-form>
+            {%- endif -%}
+
+			{%- form 'product', 
+                product, 
+                id: product_form_id, 
+                class: 'form',
+                novalidate: 'novalidate'
+            -%}
+
+            <input
+                type="hidden"
+                name="id"
+                value="{{ product.selected_or_first_available_variant.id }}"
+                {% if product.selected_or_first_available_variant.available == false
+                  or quantity_rule_soldout
+                  or product.selected_or_first_available_variant == null
+                %}
+                  disabled
+                {% endif %}
+            >
+
+			{%- liquid 
+				if gift_card_recipient_feature_active
+					render 'product-giftcard-form', product: product, form: form, section: section
+				endif
+			-%}
+
+			<div>
+                {%- liquid
+                    assign check_against_inventory = true
+                    if product.selected_or_first_available_variant.inventory_management != 'shopify' or product.selected_or_first_available_variant.inventory_policy == 'continue'
+                      assign check_against_inventory = false
+                    endif
+                    if product.selected_or_first_available_variant.quantity_rule.min > product.selected_or_first_available_variant.inventory_quantity and check_against_inventory
+                      assign quantity_rule_soldout = true
+                    endif
+                -%}
+
+				<button
+                    x-grid columns="stack"
+                    id="ProductSubmitButton-{{ section.id }}"
+					type="submit"
+					name="add" 
+                    preorder="{{ pre_order }}"
+					class="cartButton {% if show_dynamic_checkout and block.settings.show_addtocart_as_primary == false %}is-outline is-currentcolor{% else %}is-primary{% endif %}"
+                    {% if product.selected_or_first_available_variant.available == false
+                        or quantity_rule_soldout
+                        or product.selected_or_first_available_variant == null
+                    %}disabled{% endif %}
+				>
+					<span class="cta">
+						{%- liquid 
+                            if product.selected_or_first_available_variant == null
+                                echo 'product.unavailable' | t
+							elsif  product.selected_or_first_available_variant.available == false or quantity_rule_soldout
+	                        	echo 'product.soldOut' | t
+	                    	else
+                                echo purchaseButtonText
+							endif 
+	                    -%}
+					</span>
+
+                    <span x-grid columns="1" pi="center" class="loading__spinner">{{ 'product.addingToCart' | t }}</span>
+				</button>
+
+				{%- liquid
+					if show_dynamic_checkout
+						echo form | payment_button
+					endif
+				-%}
+			</div>
+	        {%- endform -%}
+
+            {%- if settings.cart_type != 'page' -%}
+            </ajax-cart-product-form>
+            {%- endif -%}
+
+	    </product-form>
+
+        {%- if block.settings.show_pickup_availability -%}
+            {%- assign pick_up_availabilities = product.selected_or_first_available_variant.store_availabilities | where: 'pick_up_enabled', true -%}
+
+            <pickup-availability
+                data-root-url="{{ routes.root_url }}"
+                data-variant-id="{{ product.selected_or_first_available_variant.id }}"
+                data-has-only-default-variant="{{ product.has_only_default_variant }}"
+                {% if product.selected_or_first_available_variant.available and pick_up_availabilities.size > 0 %}available{% endif %}
+            >
+                <template>
+                    <pickup-availability-preview>
+                        <div class="pickup-availability-info">
+                            <p>{{ 'product.unavailable' | t }}</p>
+                            <button>{{ 'product.refresh' | t }}</button>
+                        </div>
+                    </pickup-availability-preview>
+                </template>
+            </pickup-availability>
+        {%- endif -%}
+	</section>
+
+{%- when 'qty' -%}
+	<section id="Quantity-Form-{{ section.id }}" class="quantity product-form__input product-form__quantity" {{ block.shopify_attributes }}>
+		<label for="Quantity-{{ section.id }}"{%- if block.settings.label != true -%} class="visually-hidden"{%- endif -%}>{{ 'product.quantity.qty' | t }}</label>
+
+		<quantity-input class="quantity" data-url="{{ product.url }}" data-section="{{ section.id }}" x-flex>
+			<button class="is-blank no-js-hidden quantity__button" name="minus" type="button">
+				<span class="visually-hidden">{{ 'product.quantity.decrease' | t: product: product.title | escape }}</span>
+                {%- render 'global-icon' with 'minus' -%}
+			</button>
+
+            <input
+                id="Quantity-{{ section.id }}"
+                class="quantity__input"
+                type="number"
+                name="quantity"
+                form="{{ product_form_id }}"
+                data-cart-quantity="{{ cart_qty }}"
+                data-min="{{ product.selected_or_first_available_variant.quantity_rule.min }}"
+                min="{{ product.selected_or_first_available_variant.quantity_rule.min }}"
+                {% if product.selected_or_first_available_variant.quantity_rule.max != null %}
+                  data-max="{{ product.selected_or_first_available_variant.quantity_rule.max }}"
+                  max="{{ product.selected_or_first_available_variant.quantity_rule.max }}"
+                {% endif %}
+                step="{{ product.selected_or_first_available_variant.quantity_rule.increment }}"
+                value="{{ product.selected_or_first_available_variant.quantity_rule.min }}"
+            >
+
+			<button class="is-blank no-js-hidden quantity__button" name="plus" type="button">
+				<span class="visually-hidden">{{ 'product.quantity.increase' | t: product: product.title | escape }}</span>
+				{%- render 'global-icon' with 'plus' -%}
+  			</button>
+		</quantity-input>
+	</section>
+
+
+{%- when 'inventory' -%}
+    <section class="inventory" {{ block.shopify_attributes }}>
+        <inventory-status 
+        	id="Inventory-{{ section.id }}"
+        	class="no-js-hidden {% if product.selected_or_first_available_variant.inventory_management != 'shopify' %} visibility-hidden{% endif %}" 
+        	style="--inventoryStatusAlign:{{ block.settings.alignment }}"
+        	role="status"
+        >
+        	{%- liquid
+	            if product.selected_or_first_available_variant.inventory_management == 'shopify'
+	                if product.selected_or_first_available_variant.inventory_quantity > 0
+
+	                    if product.selected_or_first_available_variant.inventory_quantity <= block.settings.inventory_threshold
+
+		                    echo '<x-flex class="inventoryStatus">'
+		                    	echo '<div class="dot is-orange"></div>'
+		                    	echo '<x-cell class="txt">'
+			                    if block.settings.show_inventory_quantity
+			                    	echo 'product.inventory_low_stock_show_count' | t: quantity: product.selected_or_first_available_variant.inventory_quantity
+			                    else 
+			                    	echo 'product.inventory_low_stock' | t
+			                    endif
+			                	echo '</x-cell>'
+							echo '</x-flex>'
+
+	                    else
+
+	                    	echo '<x-flex class="inventoryStatus">'
+	                    		echo '<div class="dot"></div>'
+	                    		echo '<x-cell class="txt">'
+	                    		if block.settings.show_inventory_quantity
+	                    			echo 'product.inventory_in_stock_show_count' | t: quantity: product.selected_or_first_available_variant.inventory_quantity
+		                        else
+		                            echo 'product.inventory_in_stock' | t
+		                        endif
+		                        echo '</x-cell>'
+	                        echo '</x-flex>'
+
+	                    endif
+
+	                else
+
+	                	echo '<x-flex class="inventoryStatus">'
+	                		echo ''
+		                    if product.selected_or_first_available_variant.inventory_policy == 'continue'
+		                    	echo '<x-cell><div class="dot"></div></x-cell> <x-cell class="txt">'
+		                    	echo 'product.inventory_out_of_stock_continue_selling' | t
+		                    	echo '</x-cell>'
+		                    else
+		                    	echo '<x-cell><div class="dot is-red is-paused"></div></x-cell> <x-cell class="txt">'
+		                    	echo 'product.inventory_out_of_stock' | t
+		                    	echo '</x-cell>'
+		                    endif
+		                    echo '</x-cell>'
+	                    echo '</x-flex>'
+
+	                endif
+	            endif 
+        	-%}
+        </inventory-status>
+    </section>
+
+{%- when 'product_list' -%}
+    {%- if block.settings.product_list != blank -%}
+        {%- assign pageProductId = product.id -%}
+        {% style %}@view-transition { navigation: auto } product-info { view-transition-name: product-info } ::view-transition-old(product-info) { animation: 250ms ease-in-out both fadeOut } ::view-transition-new(product-info) { animation: 250ms ease-in-out both fadeIn; }{% endstyle %}
+
+        <section class="product-siblings" {{ block.shopify_attributes }}>
+            <fieldset class="product-form__input product-form__input--pill swatch-shape-{{ block.settings.swatch_shape }}">
+                <x-flex jc="between" ai="center" class="fullwidth"><legend class="form__label">{{ block.settings.heading }}</legend></x-flex>
+                <ul class="no-style swatch-group" x-flex wrap="wrap" style="--swatchCropType: {{ block.settings.swatch_crop }};">
+                {%- for product in block.settings.product_list -%}
+                    <li prod-instock="{{ product.available }}" {% if pageProductId == product.id %}data-same{% endif %}>
+                        {%- if pageProductId != product.id %}<a href="{{ product.url }}">{% endif -%} 
+                            {%- liquid
+                                assign img = product.featured_image.src
+                                assign alt = product.title | escape
+                                assign width = 300 
+                                assign widths = '50,100,200,300'
+                                assign loading = loading | default: 'lazy'
+
+                                if img
+                                    echo '<picture>'
+                                    echo img | image_url: width: width | image_tag: widths: widths, loading: loading, alt: alt
+                                    echo '</picture>'
+                                endif
+                            -%}
+                        {%- if pageProductId != product.id %}</a>{% endif -%}
+                    </li>
+                {%- endfor -%}
+                </ul>
+            </fieldset>
+        </section>
+    {%- render 'inc-stylesheet', src: 'swatches.css', loading: 'defer' -%}
+    {%- endif -%}
+
+{%- when 'complementary' -%}
+	<product-recommendations class="product complementary-products" 
+        data-url="{{ routes.product_recommendations_url }}?intent=complementary"
+        data-section-id="{{ section.id }}"
+        data-product-id="{{ product.id }}"
+        {{ block.shopify_attributes }}
+    >
+    {%- if recommendations.performed and recommendations.products_count > 0 -%}
+	<section class="complementary accordion">
+		<details {% if block.settings.checked == true %}open{% endif %}>
+			<summary class="dropdown-caret">{{ block.settings.heading }}</summary>
+
+			<div>
+			{%- if block.settings.listStyle == 'cards' -%}
+
+		        <x-flex
+		            direction="row"
+		            class="cards scroll-snap scroll-snap-m"
+		            style="gap:var(--globalBorderWidth)"
+		            card-type="{{ settings.cardTypeOf }}"
+		            card-ratio="{{ settings.cardRatio }}"
+		            card-quickbuy="{{ settings.cardQuickBuy }}"
+		            card-quickbuy-hover="{{ settings.cardHoverQuickBuy }}"
+		            card-quickbuy-float="{{ settings.cardFloatQuickBuy }}"
+		            card-img-crop="{{ settings.cardImgCrop }}"
+		            card-img-radius="{{ settings.cardImgRadius }}"
+		            card-img-padding="{{ settings.cardImgPadding }}"
+		        >
+		        {%- liquid 
+		            for product in recommendations.products
+		                render 'global-product-card' for product as product
+		            endfor
+		        -%}
+		        </x-flex>
+
+			{%- else -%}
+
+		        {%- for product in recommendations.products -%}
+		            <x-grid {% if block.settings.show_image %}columns="3"{% else %}columns="2"{% endif %} style="gap:var(--padding)" class="lists">
+		                {%- if block.settings.show_image -%}
+		                <x-cell>
+		                    <a href="{{ product.url }}" class="no-style">
+		                    {%- assign img = product.featured_image.src -%}
+		                    {%- if img != nil -%}
+		                    <picture>
+		                        {{ img | image_url: width: 250 | image_tag: width: 250, loading: 'lazy', alt: img.alt | escape }}
+		                    </picture>
+		                    {%- endif -%}
+		                    </a>
+		                </x-cell>
+		                {%- endif -%}
+		                <x-cell><a href="{{ product.url }}" class="no-style">{{ product.title }}</a></x-cell>
+		                <x-cell js="end">{%- render 'global-product-price' for product as product -%}</x-cell>
+		                <x-cell span="row">{%- render 'global-product-form' for product as product -%}</x-cell>
+		            </x-grid>
+		        {%- endfor -%}
+
+			{%- endif -%}
+			</div>
+		</details>
+	</section>
+	{%- endif -%}
+	</product-recommendations>
+{%- endcase -%}

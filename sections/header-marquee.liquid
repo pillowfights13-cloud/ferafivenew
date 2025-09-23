@@ -1,0 +1,109 @@
+{%- if section.settings.homeOnly == false or template.name == 'index' -%}
+<section class="marquee" style="--marqueeBg:{{ section.settings.marqueeBg }};--marqueeColor:{{ section.settings.marqueeColor }}">
+    <ferafive-marquee
+        {% if section.settings.marqueeMarquee == true %}go{% endif %} 
+        ferafive-reverse="{{ section.settings.marqueeDirection }}" 
+        ferafive-speed="{{ section.settings.marqueeSpeeds }}" 
+        ferafive-pause="{{ section.settings.marqueePause }}"
+        ferafive-image="false"
+    >
+        {%- for i in (1..15) -%}
+        <span class="projectile" {% unless forloop.first %}aria-hidden="true"{% endunless %}>
+            {% if section.settings.notice != blank %}
+            <span>
+            {% if section.settings.link != blank %}<a href="{{ section.settings.link }}" class="no-style" {% unless forloop.first %}aria-hidden="true" tabindex="-1"{% endunless %}>{% endif %}
+                <x-flex ai="center" jc="center" style="gap:var(--marqueeLateralSpace)">
+                    <x-cell>{{ section.settings.notice }}</x-cell> 
+                    {%- if section.settings.image -%}<x-cell>{{ section.settings.image | image_url: height: 65 | image_tag: srcset: nil, loading: 'lazy' }}</x-cell>{%- endif -%}
+                </x-flex>
+            {% if section.settings.link != blank %}</a>{% endif %}
+            </span>
+            {% endif %}
+        </span>
+        {%- endfor -%}
+    </ferafive-marquee>
+</section>
+
+{%- endif -%}
+
+{% schema %}
+{
+    "name": "Announcement bar",
+    "class": "announcement-bar",
+    "limit": 2,
+    "enabled_on": { "groups": ["header"] },
+    "presets": [ { "name": "Announcement bar" } ],
+    "settings": [
+        {
+          "type": "checkbox",
+          "id": "homeOnly",
+          "label": "Show only on home page",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "id": "marqueeMarquee",
+          "label": "Scrolling text",
+          "default": true
+        },
+        {
+          "type": "textarea",
+          "id": "notice",
+          "label": "Text",
+          "default": "Announce something here"
+        },
+    {
+        "type": "image_picker",
+        "id": "image",
+        "label": "Image icon",
+        "info": "60 x 60 px recommended"
+    },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        },
+        {
+            "type": "select",
+            "id": "marqueeDirection",
+            "label": "Scroll direction",
+            "default": "false",
+            "options": [
+                { "value": "false", "label": "Right to left" },
+                { "value": "true", "label": "Left to right" }
+            ]
+        },
+        {
+            "type": "range",
+            "label": "Scrolling speed",
+            "id": "marqueeSpeeds",
+            "min": 10,
+            "max": 100,
+            "step": 5,
+            "default": 40
+        },
+        {
+            "type": "checkbox",
+            "id": "marqueePause",
+            "label": "Pause scrolling on hover",
+            "default": true
+        },
+        {
+          "type": "header",
+          "content": "Appearance"
+        },
+        {
+          "type": "color",
+          "id": "marqueeBg",
+          "label": "Background color",
+          "default": "#FFFFFF"
+        },
+        {
+          "type": "color",
+          "id": "marqueeColor",
+          "label": "Text color",
+          "default": "#000000"
+        }
+    ]
+}
+{% endschema %}

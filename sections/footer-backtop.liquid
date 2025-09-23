@@ -1,0 +1,15 @@
+<a href="#header" class="button is-blank is-currentcolor no-js">{{ 'footer.backToTop' | t }}</a>
+<button class="is-blank is-currentcolor no-js-hidden" onclick="scrollToTopAndFocusHeader()">{{ 'footer.backToTop' | t }}</button>
+<script>function scrollToTopAndFocusHeader() { window.scrollTo({ top: 0, behavior: 'smooth' }); setTimeout(() => { const header = document.getElementById('header'); if (header) header.focus() }, 1000) }</script>
+
+{% schema %}
+{
+  "name": "Back-to-top button",
+  "class": "bouncebackup",
+  "enabled_on": {
+    "groups": [
+      "footer"
+    ]
+  }
+}
+{% endschema %}

@@ -1,0 +1,644 @@
+{%- liquid
+# Search
+    render 'header-search'
+
+# Variables
+    assign hasIcons = section.settings.hasIcons
+
+# Header position type
+    if template.name == "index" and section.settings.homeOverlay
+        if section.settings.headerPosition == true 
+            assign headerPosition = 'fixed'
+        else 
+            assign headerPosition = 'absolute'
+        endif
+    else 
+        if section.settings.headerPosition == true 
+            assign headerPosition = 'sticky'
+        else 
+            assign headerPosition = 'inherit'
+        endif
+    endif
+
+# For loops
+    for block in section.blocks 
+
+# How many blocks
+    assign blockNumb = section.blocks.size
+
+# Blocks
+    case block.type 
+    when 'logo'
+        assign logoFont = block.settings.logoFont
+        assign logoFontBold = logoFont | font_modify: 'weight', 'bold'
+        assign logoFontItalic = logoFont | font_modify: 'style', 'italic'
+        assign logoFontBoldItalic = logoFontBold | font_modify: 'style', 'italic'
+
+        if block.settings.logoImage == blank
+        capture logoBlock
+            echo logoFont | font_face: font_display: 'swap'
+            echo logoFontBold | font_face: font_display: 'swap'
+            echo logoFontItalic | font_face: font_display: 'swap'
+            echo logoFontBoldItalic | font_face: font_display: 'swap'
+        endcapture
+        endif
+    endcase 
+    endfor
+-%}
+
+{%- style -%}
+{{ logoBlock }}
+:root{ --headerPosition:{{ headerPosition }};--logoFontFamily:{{ logoFont.family }},{{ logoFont.fallback_families }};--logoFontWeight:{{ logoFont.weight }};--logoFontStyle:{{ logoFont.style }} }
+{%- if section.settings.outlinedLinks -%}
+@media (min-width:778px) {
+    .main-header header a.no-style, .main-header header .dm.lv1 summary { padding-inline: calc(1.5 * var(--buttonPadding))!important }
+    .main-header header :where(a.no-style,.dm.lv1 summary):hover,
+    .main-header header details[open] > summary { outline: 1px solid var(--globalBorderColor); outline-offset: -1rem; border-radius: calc(1rem + var(--radius)) }
+}
+{%- endif -%}
+
+{%- if template.name == "index" and section.settings.homeOverlay -%}
+    [class*="group-header"]:not(.main-header) { display: none }
+    :is(.main-header #header, .main-header #header details.dm > details-menu) {
+        --headerColor: {{ section.settings.overlayTextColor }};
+        --linkColor: var(--headerColor);
+        --linkHover: var(--headerColor);
+        --headerBorder: {{ section.settings.overlayBorderColor }};
+    {%- if section.settings.bgFill == 'translucent' -%}
+        {%- if section.settings.overlayBgColor.alpha == 0.0 or section.settings.overlayBgColor == blank -%}
+        --headerBg: transparent; -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px);
+        {%- else -%}
+        --headerBg: {{ section.settings.overlayBgColor | color_modify: 'alpha', 0.65 }}; -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px);
+        {%- endif -%}
+    {%- elsif section.settings.bgFill == 'transparent' -%}
+        --headerBg: transparent;
+    {%- elsif section.settings.bgFill == 'solid' -%}
+        --headerBg: {{ section.settings.overlayBgColor }};
+    {%- endif -%}
+    }
+{%- endif -%}
+{%- endstyle -%}
+
+<header id="header" tabindex="-1">
+
+    <x-grid id="header-grid" columns="{{ blockNumb }}" columns-s="2" {% if section.settings.hasBorder == true %}class="hasBorders"{% endif %}>
+    {%- assign hasAccounts = false -%}
+    {%- for block in section.blocks -%}
+    {%- case block.type -%}
+    {%- when 'logo' -%}
+        <x-cell class="bogo" order-s="1" {{ block.shopify_attributes }}>
+            <style>:root{--logoImageSize:{{ block.settings.logoImageSize }}px;--logoAlign:{{ block.settings.logoAlignment }}}</style>
+            <a href="{{ routes.root_url }}" class="no-style">
+                {%- if block.settings.logoImage != blank -%}
+                {%- assign img = block.settings.logoImage -%}
+                {{ img | image_url: width: 400 | image_tag:
+                    class: 'logo',
+                    widths: '100,200,400',
+                    alt: shop.name | escape
+                }}
+                {%- else -%}
+                <div class="logo" style="--logoSize:{{ block.settings.logoFontSize }}px;">
+                    {% if block.settings.logoName != blank %} {{ block.settings.logoName }} {% else %} {{ shop.name }} {% endif %}
+                </div>
+                {%- endif -%}
+            </a>
+        </x-cell>
+    {%- when 'menuLinks' -%}
+    <x-cell class="menulink large-only" style="--navAlign:{{ block.settings.navigationAlignment }};--navDropdownAlign:{{ block.settings.navigationDropdownAlignment }}" {{ block.shopify_attributes }}>
+    {%- assign linklist = block.settings.main_linklist -%}
+    <nav aria-label="{{ 'header.menu' | t }}">
+    <ul class="inline large-only">
+    {%- comment -%} Main Menu {%- endcomment -%}
+    {%- for link in linklists[linklist].links -%}
+        <li>
+        {% if link.links == blank %}
+            <a href="{{ link.url }}" class="no-style" data-name="{{- link.title | escape -}}">{{ link.title }}</a>
+        {% else %}
+            <details class="dm lv1 closex" id="Details-{{ forloop.index }}">
+            <summary class="dropdown-caret" data-name="{{- link.title | escape -}}">{{ link.title }}</summary>
+            <details-menu id="Menu-{{ forloop.index }}">
+                <div class="mob-scroller">
+                <ul class="inline">
+                {%- for child_link in link.links -%} 
+                {% if child_link.links == blank %}
+                    <li><a href="{{ child_link.url }}" class="no-style" data-name="{{ child_link.title | escape }}">{{ child_link.title }}</a></li>
+                {%- else -%}
+                    <li><details class="dm lv2 closex" id="Details-{{ forloop.index }}">
+                    <summary class="dropdown-caret" data-name="{{ child_link.title | escape }}">{{ child_link.title }}</summary>
+                    <details-menu id="Menu-{{ forloop.index }}">
+                        <div class="mob-scroller">
+                        <ul class="inline">
+                        {%- for grandchild_link in child_link.links -%} 
+                        {%- if grandchild_link.links == blank -%}
+                            <li><a href="{{ grandchild_link.url }}" class="no-style" data-name="{{ grandchild_link.title | escape }}">{{ grandchild_link.title }}</a></li>
+                        {%- else -%}
+                            <li><details class="dm lv3 closex" id="Details-{{ forloop.index }}">
+                            <summary class="dropdown-caret" data-name="{{ grandchild_link.title | escape }}">{{ grandchild_link.title }}</summary>
+                            <details-menu id="Menu-{{ forloop.index }}">
+                                <div class="mob-scroller">
+                            <ul class="inline">
+                            {%- for grandgrandchild_link in grandchild_link.links -%} 
+                            {%- if grandgrandchild_link.links == blank -%}
+                                <a href="{{ grandgrandchild_link.url }}" class="no-style" data-name="{{ grandgrandchild_link.title | escape }}">{{ grandgrandchild_link.title }}</a>
+                            {%- endif -%}
+                            {%- endfor -%}
+                            </ul>
+                            </div>
+                            </details-menu>
+                            </details></li>
+                        {%- endif -%}
+                        {%- endfor -%}
+                        </ul>
+                    </div>
+                    </details-menu>
+                    </details></li>
+                {%- endif-%}
+                {%- endfor -%}
+                </ul>
+            </div>
+            </details-menu>
+            </details>
+        {% endif %}
+        </li>
+    {%- endfor -%}
+    </ul>
+    </nav>
+    {%- if section.settings.openOnHover -%}
+        <script>document.addEventListener('DOMContentLoaded', () => { const header = document.querySelector('#header'); const detailsx = header.querySelectorAll('.closex'); detailsx.forEach((detail) => { detail.addEventListener('mouseover', () => { detail.setAttribute('open', ''); a11yDetails() }); detail.addEventListener('mouseout', () => {  detail.removeAttribute('open'); a11yDetails()  }) }) })</script>
+    {%- endif -%}
+    </x-cell>
+    {%- when 'accounts' -%}
+    {%- assign hasAccounts = true -%}
+        <x-cell class="accounts" order-s="3" style="--accAlign:{{ block.settings.accountsAlignment }}" {{ block.shopify_attributes }}>
+        <ul class="inline {% if hasIcons %}hasIco{%- endif -%}">
+
+            {%- comment -%} Hamburger button for mobile {%- endcomment -%}
+            <li class="small-only hamburger">
+                {% capture the_hamburger %}
+                    {%- if hasIcons -%}
+                        {% render 'global-icon' with 'menu' %}
+                        <span class="visually-hidden">{{ 'header.menu' | t }}</span>
+                    {%- else -%}
+                        {{ 'header.menu' | t }}
+                    {%- endif -%}
+                {% endcapture %}
+
+                <button class="is-blank fire-menu no-js-hidden">{{ the_hamburger }}</button>
+                <noscript><a href="#mobmenu" class="no-style" style="padding-inline:0">{{ the_hamburger }}</a></noscript>
+            </li>
+
+            {%- comment -%} Country button {%- endcomment -%}
+            {%- if localization.available_countries.size > 1 or localization.available_languages.size > 1 -%}
+            <li>
+                <x-flex class="localization large-only">
+                    {%- if block.settings.show_country and localization.available_countries.size > 1  -%}
+                        <x-cell class="selector-country">
+                            {%- capture country_selector -%}
+                            {%- if hasIcons -%}
+                                {%- render 'global-icon' with 'globe' -%}
+                                <span class="visually-hidden">{{ 'footer.languageLabel' | t }}</span>
+                            {%- else -%}
+                                <x-flex ai="center" jc="between" wrap="nowrap">
+                                    {%- # Country/region selector -%}
+                                    <x-cell class="country-name visually-hidden">{{- localization.country.name }}</x-cell>
+                                    <x-cell class="country-currency">{{ localization.country.currency.iso_code }} {{ localization.country.currency.symbol -}}</x-cell>
+                                </x-flex>
+                            {%- endif -%}
+                            {%- endcapture -%}
+
+                            <button class="is-custom js dropdown-caret" data-open="#countryBox">{{ country_selector }}</button>
+                            <noscript><a href="#countryBox" class="button is-custom dropdown-caret">{{ country_selector }}</a></noscript>
+                        </x-cell>
+                    {%- endif -%}
+
+                    {%- comment -%} Language button {%- endcomment -%}
+                    {%- if block.settings.show_language and localization.available_languages.size > 1 -%}
+                        <x-cell class="selector-language">
+                            {%- capture language_selector -%}
+                            {%- if hasIcons -%}
+                                {%- render 'global-icon' with 'lang' -%}
+                                <span class="visually-hidden">{{ 'footer.languageLabel' | t }}</span>
+                            {%- else -%}
+                                <x-flex ai="center" jc="between" wrap="nowrap">
+                                    {%- # Language selector -%}
+                                    <x-cell class="language">{{ localization.language.iso_code | upcase }}</x-cell>
+                                </x-flex>
+                            {%- endif -%}
+                            {%- endcapture -%}
+
+                            <button class="is-custom js dropdown-caret" data-open="#languageBox">{{ language_selector }}</button>
+                            <noscript><a href="#languageBox" class="button is-custom dropdown-caret">{{ language_selector }}</a></noscript>
+                        </x-cell>
+                    {% endif %}
+                </x-flex>
+            </li>
+            {%- endif -%}
+
+            {%- comment -%} Account URLS {%- endcomment -%}
+            {%- if shop.customer_accounts_enabled and block.settings.accountLink != false -%}
+                {%- if customer -%}
+                    <li class="large-only">
+                        <a href="{{ routes.account_url }}" class="no-style">
+                        {%- if hasIcons -%}
+                            {% render 'global-icon' with 'user' %}
+                            <span class="visually-hidden">{{ 'header.account' | t }}</span>
+                        {%- else -%}
+                            {{ 'header.account' | t }}
+                        {%- endif -%}
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="large-only">
+                        <a href="{{ routes.account_login_url }}" class="no-style">
+                        {%- if hasIcons -%}
+                            {% render 'global-icon' with 'user' %}
+                            <span class="visually-hidden">{{ 'header.login' | t }}</span>
+                        {%- else -%}
+                            {{ 'header.login' | t }}
+                        {%- endif -%}
+                        </a>
+                    </li>
+                {%- endif -%}
+            {%- endif -%}
+
+            {%- comment -%} Search button {%- endcomment -%}
+            {%- if block.settings.searchBar != false -%}
+            <li><a href="{{ routes.search_url }}" class="no-style fire-search" onclick="event.preventDefault()">
+                {%- if hasIcons -%}
+                    {% render 'global-icon' with 'search' %}
+                    <span class="visually-hidden">{{ 'header.search' | t }}</span>
+                {%- else -%}
+                    {{ 'header.search' | t }}
+                {%- endif -%}
+            </a></li>
+            {%- endif -%}
+
+            {%- comment -%} Cart button {%- endcomment -%}
+            <li class="cartCounter">
+                {% capture cart_counter %}
+                <span id="counter" data-count="{{ cart.item_count }}">
+                    <span class="visually-hidden">{{ 'cart.cart' | t }}</span>
+                    {%- if hasIcons -%} {% render 'global-icon' with 'cart' %} {%- endif -%}
+                    <span class="visually-hidden" data-ajax-cart-bind="item_count">{{ cart.item_count }}</span>
+                </span>
+                {% endcapture %}
+
+                {%- if template != 'cart' and settings.cart_type != 'page' -%}
+                    <button class="is-blank js" aria-label="{{ 'cart.cart' | t }}" data-open="#cartBox">{{ cart_counter }}</button>
+                {%- else -%}
+                    <a href="{{ routes.cart_url }}" class="no-style" tabindex="0">{{ cart_counter }}</a>
+                {%- endif -%}
+            </li>
+        </ul>
+        </x-cell>
+    {%- endcase -%}
+    {%- endfor -%}
+    {%- if hasAccounts == false -%}
+        <x-cell class="accounts small-only" order-s="3">
+            <ul class="inline {% if hasIcons %}hasIco{%- endif -%}">
+                <li class="hamburger">
+                    <span class="fire-menu" style="padding:var(--buttonPadding)">
+                    {%- if hasIcons -%}
+                        {% render 'global-icon' with 'menu' %}
+                        <span class="visually-hidden">{{ 'header.menu' | t }}</span>
+                    {%- else -%}
+                        {{ 'header.menu' | t }}
+                    {%- endif -%}
+                    </span>
+                </li>
+            </ul>
+        </x-cell>
+    {%- endif -%}
+    </x-grid>
+</header>
+
+
+
+<script>document.body.classList.add('hp{{ headerPosition }}'); let headerElements = document.querySelectorAll('[class*="group-header"]'), headerHeight = 0, debouncer; function updateHeaderHeight() { headerHeight = 0; headerElements.forEach(element => { headerHeight += element.clientHeight }); document.body.style.setProperty('--headerGroupHeight', `${headerHeight}px`); getElementHeight('#header','body','--headerHeight'); getElementHeight('.marquee','body','--marqueeHeight') } function debouncedResize() { clearTimeout(debouncer); debouncer = setTimeout(() => updateHeaderHeight(), 100) } document.addEventListener('DOMContentLoaded', () => { updateHeaderHeight() }); window.addEventListener('resize', debouncedResize)</script>
+
+{%- liquid
+    # Mobile menu
+    for block in section.blocks 
+        if block.type == 'menuLinks'
+            render 'header-mobile', linklist: block.settings.main_linklist, suggestedLinklist: section.settings.suggestedLinklist, accountLinkMob: section.settings.accountLinkMob, language_selector: language_selector, country_selector: country_selector
+        endif
+    endfor
+
+    unless template == 'cart'
+       render 'header-cart', location: 'drawer'
+    endunless 
+-%}
+
+{% schema %}
+{
+  "name": "Header",
+  "class": "main-header",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Header",
+      "info": "Find out how you can customize your header even more. [Learn more](https://docs.ferafive.com/themes/ferafive/kb/snippets/#custom-headers)"
+    },
+    {
+      "type": "checkbox",
+      "id": "headerPosition",
+      "label": "Enable sticky header",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "hasBorder",
+      "label": "Show borders",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "outlinedLinks",
+      "label": "Show link outline on hover",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "openOnHover",
+      "label": "Open menu on hover",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "hasIcons",
+      "label": "Show icons",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "accountLinkMob",
+      "label": "Show user accounts on mobile",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Home page overlay settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "homeOverlay",
+      "label": "Overlay header",
+      "info": "When enabled, this option will hide all header group sections except the header.",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "bgFill",
+      "label": "Background type",
+      "default": "transparent",
+      "options": [
+        {
+          "value": "solid",
+          "label": "Solid"
+        },
+        {
+          "value": "translucent",
+          "label": "Translucent"
+        },
+        {
+          "value": "transparent",
+          "label": "Transparent"
+        }
+      ]
+    },
+    {
+      "type": "color",
+      "id": "overlayBgColor",
+      "label": "Background color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "overlayTextColor",
+      "label": "Text color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "overlayBorderColor",
+      "label": "Border color",
+      "default": "#000000"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "logo",
+      "name": "Logo",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "header",
+          "content": "Image logo"
+        },
+        {
+          "type": "image_picker",
+          "id": "logoImage",
+          "label": "Image"
+        },
+        {
+          "type": "range",
+          "id": "logoImageSize",
+          "min": 20,
+          "max": 120,
+          "step": 5,
+          "unit": "px",
+          "label": "Size",
+          "default": 20
+        },
+        {
+          "type": "header",
+          "content": "Text logo",
+          "info": "Text logo will not be visible if an image logo is present."
+        },
+        {
+          "type": "text",
+          "id": "logoName",
+          "label": "Text"
+        },
+        {
+          "type": "font_picker",
+          "label": "Font",
+          "id": "logoFont",
+          "default": "helvetica_n4",
+          "info": "Selecting a different font can affect the speed of your store. [Learn more about system fonts.](https://help.shopify.com/en/manual/online-store/store-speed/improving-speed#fonts)"
+        },
+        {
+          "type": "range",
+          "id": "logoFontSize",
+          "min": 10,
+          "max": 30,
+          "step": 1,
+          "unit": "px",
+          "label": "Size",
+          "default": 15
+        },
+        {
+          "type": "header",
+          "content": "Block alignment"
+        },
+        {
+          "type": "select",
+          "id": "logoAlignment",
+          "label": "Content alignment",
+          "default": "start",
+          "options": [
+            {
+              "value": "start",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "end",
+              "label": "Right"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "menuLinks",
+      "name": "Navigation",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "link_list",
+          "id": "main_linklist",
+          "label": "Main menu",
+          "default": "main-menu"
+        },
+        {
+          "type": "header",
+          "content": "Block alignment"
+        },
+        {
+          "type": "select",
+          "id": "navigationAlignment",
+          "label": "Content alignment",
+          "default": "center",
+          "options": [
+            {
+              "value": "flex-start",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "flex-end",
+              "label": "Right"
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "navigationDropdownAlignment",
+          "label": "Dropdown links alignment",
+          "default": "auto",
+          "options": [
+            {
+              "value": "0",
+              "label": "Left"
+            },
+            {
+              "value": "auto",
+              "label": "Center"
+            },
+            {
+              "value": "auto 0",
+              "label": "Right"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "accounts",
+      "name": "Secondary menu",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "accountLink",
+          "label": "Show link to user account",
+          "info": "Activate customer accounts first. [Learn more](https://help.shopify.com/en/manual/checkout-settings/customer-accounts)",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "searchBar",
+          "label": "Show search",
+          "default": true
+        },
+        {
+            "type": "header",
+            "content": "Country/region selector",
+            "info": "To add a country/region, go to your [payment settings.](/admin/settings/payments)"
+          },
+          {
+            "type": "checkbox",
+            "id": "show_country",
+            "label": "Enable country/region selector",
+            "default": false
+        },
+          {
+            "type": "header",
+            "content": "Language selector",
+            "info": "To add a language, go to your [language settings.](/admin/settings/languages)"
+          },
+          {
+            "type": "checkbox",
+            "id": "show_language",
+            "label": "Enable language selector",
+            "default": false
+        },
+        {
+          "type": "header",
+          "content": "Block alignment"
+        },
+        {
+          "type": "select",
+          "id": "accountsAlignment",
+          "label": "Content alignment",
+          "default": "flex-end",
+          "options": [
+            {
+              "value": "flex-start",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "flex-end",
+              "label": "Right"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "default": {
+    "blocks": [
+      {
+        "type": "logo"
+      },
+      {
+        "type": "menuLinks"
+      },
+      {
+        "type": "accounts"
+      }
+    ]
+  }
+}
+{% endschema %}

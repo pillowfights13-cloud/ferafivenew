@@ -1,0 +1,67 @@
+<style>section.newsletter > *:not(.gs-title) { padding-inline: var(--padding); padding-block-end: var(--padding) }</style>
+
+<section class="newsletter">
+	<h3 class="gs-title">{{ section.settings.heading }}</h3>
+	<x-flex direction="column" jc="center" class="{{ section.settings.dialogTextAlign }}" style="gap:var(--padding)">
+		<x-cell order="1" class="heading">
+			{%- if section.settings.subheading != blank -%}<h4 class="h2">{{ section.settings.subheading }}</h4>{%- endif -%}
+		</x-cell>
+		<x-cell order="2" class="description">{{ section.settings.description }}</x-cell>
+		<x-cell order="3" class="form">{%- render 'global-newsletter', class: 'section-newsletter' -%}</x-cell>
+		{%- if section.settings.disclaimer != blank -%}
+		<x-cell order="4" class="disclaimer"><small>{{ section.settings.disclaimer }}</small></x-cell>
+		{%- endif -%}
+	</x-flex>
+</section>
+
+{% schema %}
+{
+  "name": "Newsltter",
+  "disabled_on": { "groups": ["header", "footer", "aside"] },
+  "presets": [
+    {
+      "name": "Newsletter"
+    }
+  ],
+  "settings": [
+	{
+      "type": "header",
+      "content": "Newsletter",
+      "info": "Subscribers will be added to your “accepts marketing” [customer list.](/admin/customers?query=&accepts_marketing=1)"
+	},
+      {
+        "type": "text",
+        "id": "heading",
+        "label": "Heading",
+        "default": "Newsletter"
+      },
+      {
+        "type": "text",
+        "id": "subheading",
+        "label": "Subheading"
+      },
+      {
+        "type": "textarea",
+        "id": "description",
+        "label": "Description",
+        "default": "Stay up to date on the latest product releases, special offers and news by signing up for our newsletter."
+      },
+      {
+        "type": "richtext",
+        "id": "disclaimer",
+        "label": "Disclaimer"
+      },
+      {
+        "type": "select",
+        "id": "dialogTextAlign",
+        "label": "Text align",
+        "default": "text-start",
+        "options": [
+            { "value": "text-start", "label": "Left" },
+            { "value": "text-center", "label": "Center" },
+            { "value": "text-end", "label": "Right" }
+        ]
+      }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,52 @@
+<div class="general-page about-page">
+<section class="about">
+    <x-grid columns="2" columns-s="1">
+        <x-cell class="gallery">
+            <picture>
+            {%- assign img = section.settings.image -%}
+            {%- if img != nil -%}
+              {{ img | image_url: width: 1280 | image_tag: width: 1280, loading: 'lazy', alt: img.alt | escape }}
+            {%- else -%}
+                {{ 'image' | placeholder_svg_tag: 'svg-placeholder banner' }}
+            {%- endif -%}
+            </picture>
+        </x-cell>
+
+        <x-cell class="meta">
+            <h1>{% if section.settings.heading != blank %}{{ section.settings.heading }}{% else %}{{ page.title }}{% endif %}</h1>
+            {% if section.settings.contents != blank %}{{ section.settings.contents }}{% else %}<div class="rte">{{ page.content }}</div>{% endif %}
+        </x-cell>
+    </x-grid>
+</section>
+</div>
+
+{% schema %}
+{
+  "name": "About page",
+  "settings": [
+    {
+      "type": "header",
+      "content": "About"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "paragraph",
+      "content": "If left empty content will be retrieved from the About page."
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "contents",
+      "label": "Body"
+    }
+  ]
+}
+{% endschema %}

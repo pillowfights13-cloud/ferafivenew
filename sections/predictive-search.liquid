@@ -1,0 +1,136 @@
+{%- if predictive_search.performed -%}
+
+{% assign first_column_results_size = predictive_search.resources.queries.size
+| plus: predictive_search.resources.collections.size
+| plus: predictive_search.resources.pages.size
+| plus: predictive_search.resources.articles.size
+%}
+
+<div id="predictive-search-results" role="listbox">
+    {%- if first_column_results_size > 0 or predictive_search.resources.products.size > 0 -%}
+    <x-grid columns="5" columns="1f" id="predictive-search-results-groups-wrapper" class="{% unless predictive_search.resources.products.size > 0 %} no-products{% endunless %}{% unless predictive_search.resources.articles.size > 0 or predictive_search.resources.pages.size > 0 %} no-pages{% endunless %}{% unless predictive_search.resources.queries.size > 0 or predictive_search.resources.collections.size > 0 %} no-suggestions{% endunless %}">
+    {%- endif -%}
+
+    {%- comment -%} Query suggestions + pages {%- endcomment -%}
+    {%- if first_column_results_size > 0 -%}
+        <x-cell span-s="row" class="o-suggestions-group" x-grid columns="1" columns-s="fit">
+        {%- comment -%} Query suggestions {%- endcomment -%}
+            {%- if predictive_search.resources.queries.size > 0 or predictive_search.resources.collections.size > 0 -%}
+            <x-cell class="o-suggestions">
+                <h2 id="predictive-search-queries" class="gs-title">{{- 'general.suggestions' | t -}}</h2>
+                <ul id="predictive-search-results-queries-list" class="no-style padding" role="group" aria-labelledby="predictive-search-queries" style="gap:0.2rem" x-grid columns="1" columns-s="fill">
+                    {%- for query in predictive_search.resources.queries -%}
+                    <li id="predictive-search-option-query-{{ forloop.index }}" role="option" aria-selected="false" x-flex direction="row" ai="center" style="gap:var(--margin)">
+                        {%- render 'global-icon' with 'search' -%}
+                        <a href="{{ query.url }}" class="suggestion-link" tabindex="-1">{{ query.styled_text }}</a>
+                    </li>
+                    {%- endfor -%}
+                    {%- for collection in predictive_search.resources.collections -%}
+                    <li id="predictive-search-option-collection-{{ forloop.index }}" role="option" aria-selected="false" x-flex direction="row" ai="center" style="gap:var(--margin)">
+                        {%- render 'global-icon' with 'search' -%}
+                        <a href="{{ collection.url }}" class="suggestion-link" tabindex="-1">{{ collection.title }}</a>
+                    </li>
+                {%- endfor -%}
+                </ul>
+            </x-cell>
+            {%- endif -%}
+
+        {%- comment -%} Page and articles {%- endcomment -%}
+            {%- if predictive_search.resources.articles.size > 0 or predictive_search.resources.pages.size > 0 -%}
+            <x-cell class="o-page o-articles">
+                <h2 id="predictive-search-pages" class="gs-title">{{- 'general.pages' | t -}}</h2>
+                <ul id="predictive-search-results-pages-list" class="no-style padding" role="group" aria-labelledby="predictive-search-pages">
+                    {%- for page in predictive_search.resources.pages -%}
+                    <li id="predictive-search-page-{{ forloop.index }}" role="option" aria-selected="false" x-flex direction="row" ai="center" style="gap:var(--margin)">
+                        {%- render 'global-icon' with 'page' -%}
+                        <a href="{{ page.url }}" tabindex="-1">{{ page.title }}</a>
+                    </li>
+                    {%- endfor -%}
+                    {%- for article in predictive_search.resources.articles -%}
+                    <li id="predictive-search-article-{{ forloop.index }}" role="option" aria-selected="false" x-flex direction="row" ai="center" style="gap:var(--margin)">
+                        {%- render 'global-icon' with 'page' -%}
+                        <a href="{{ article.url }}" tabindex="-1">{{ article.title }}</a>
+                    </li>
+                    {%- endfor -%}
+                </ul>
+            </x-cell>
+            {%- endif -%}
+        </x-cell>
+    {%- endif -%}
+
+    {%- comment -%} Products {%- endcomment -%}
+        {%- if predictive_search.resources.products.size > 0 or predictive_search.resources.articles.size > 0 or predictive_search.resources.pages.size > 0 -%}
+        <x-cell span="2.." span-s="row" class="o-products">
+
+            <h2 id="predictive-search-products" class="gs-title">{{- 'general.products' | t -}}</h2>
+            <ul id="predictive-search-results-products-list" class="no-style" role="group" aria-labelledby="predictive-search-products" x-grid columns="2" columns-s="1">
+            {%- for product in predictive_search.resources.products -%}
+                <li id="predictive-search-option-product-{{ forloop.index }}" role="option" aria-selected="false">
+                    <a href="{{ product.url }}" tabindex="-1" class="suggestion-product" x-flex ai="center">
+                        {%- if product.featured_media != blank -%}
+                        <picture>
+                            <img src="{{ product.featured_media | image_url: width: 150 }}" alt="{{ product.featured_media.alt }}" width="50" height="{{ 50 | divided_by: product.featured_media.preview_image.aspect_ratio }}" loading="lazy">
+                        </picture>
+                        {%- endif -%}
+
+                        <div>
+                        {%- liquid
+                            if settings.predictive_search_show_vendor 
+                                echo '<div>'
+                                echo product.vendor
+                                echo '</div>'
+                            endif
+                        -%}
+
+                        <h3 class="h3">{{ product.title }}</h3>
+
+                        {%- liquid 
+                            if settings.predictive_search_show_price
+                                render 'global-product-price' for product as product
+                            endif 
+                        -%}
+                        </div>
+                    </a>
+                  </li>
+            {%- endfor -%}
+            </ul>
+        </x-cell>
+        {%- endif -%}
+
+    {%- if first_column_results_size > 0 or predictive_search.resources.products.size > 0 -%}</x-grid>{%- endif -%}
+
+    {%- comment -%} Loading {%- endcomment -%}
+    <div class="predictive-search__loading-state" aria-hidden="true">{{ 'general.accessibility.loading' | t }}</div>
+
+    {%- comment -%} Button {%- endcomment -%}
+    <div id="predictive-search-option-search-keywords">
+        <button class="is-blank" tabindex="-1" class="predictive-search__item" role="option" aria-selected="false">
+            <span data-predictive-search-search-for-text>{{ 'search.search_for' | t: terms: predictive_search.terms }}</span>
+        </button>
+    </div>
+</div>
+
+<span class="hidden" data-predictive-search-live-region-count-value>
+{%- liquid
+    assign total_results = predictive_search.resources.products.size | plus: first_column_results_size
+    if total_results == 0
+        echo 'search.no_results_for' | t: terms: predictive_search.terms
+    else
+        echo 'search.results_with_count' | t: count: total_results | append: ': '
+        if predictive_search.resources.queries.size > 0
+            assign count = predictive_search.resources.queries.size | plus: predictive_search.resources.collections.size
+            echo 'search.results_suggestions_with_count' | t: count: count | append: ', '
+        endif
+
+        if predictive_search.resources.pages.size > 0
+            assign count = predictive_search.resources.pages.size | plus: predictive_search.resources.articles.size
+            echo 'search.results_pages_with_count' | t: count: count | append: ', '
+        endif
+        if predictive_search.resources.products.size > 0
+            echo 'search.results_products_with_count' | t: count: predictive_search.resources.products.size
+        endif
+    endif
+-%}
+</span>
+
+{%- endif -%}

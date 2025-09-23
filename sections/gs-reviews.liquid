@@ -1,0 +1,66 @@
+<section class="reviews">
+	<x-grid columns="2" columns-s="1" class="box">
+	{% for block in section.blocks %}
+		<x-cell {{ block.shopify_attributes }}>
+			<x-grid pi="center">
+				<x-cell span="1+1">
+				{% if block.settings.img != blank %}
+					<picture class="avatar">
+					{% assign img = block.settings.img %}
+                    {{ img | image_url: width: 300, height: 300, crop: 'center' | image_tag: widths: '100,150,200,250,300', loading: 'lazy', alt: img.alt | escape }}
+					</picture>
+				{%- else -%}
+                    {{ 'image' | placeholder_svg_tag: 'svg-placeholder square' }}
+				{%- endif -%}
+				<div class="name">{{ block.settings.name | escape }}</div>
+				</x-cell>
+				<x-cell span="2..">
+					<div class="review rte">{{ block.settings.review }}</div>
+				</x-cell>
+			</x-grid>
+		</x-cell>
+	{% endfor %}
+	</x-grid>
+</section>
+
+{% schema %}
+{
+  "name": "Testimonials",
+  "disabled_on": { "groups": ["header", "footer", "aside"] },
+  "presets": [
+    {
+      "name": "Testimonials",
+      "blocks": [
+        { "type": "text" },
+        { "type": "text" }
+      ]
+    }
+  ],
+  "blocks": [
+    {
+      "type": "text",
+      "name": "Testimonial",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "img",
+          "label": "Image",
+          "info": "300 x 300 px required"
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Name",
+          "default": "Testimonial name"
+        },
+        {
+          "type": "richtext",
+          "id": "review",
+          "label": "Description",
+          "default": "<p>Review text</p>"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

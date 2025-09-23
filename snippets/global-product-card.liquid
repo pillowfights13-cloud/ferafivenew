@@ -1,0 +1,124 @@
+{%- comment -%}
+	- Used: globally as "product card"
+	- Include: {%- render 'global-product-card' for product as product, class: your-class -%}
+	- Enclose in <x-grid>
+{%- endcomment -%}
+
+{%- liquid 
+	if settings.cardHoverImg == true and product.images[1] != nil
+		assign hasHoverImg = 'hasHover'
+	endif
+
+    # Collection-aware link
+    capture collectionAwareUrl
+        if settings.breadcrumbsParentCollection == 'collectionAware'
+            echo 'data-href="'
+            echo product.url | within: collection
+            echo '"'
+        endif
+    endcapture
+
+	# Used for image sizes
+	assign vw = 100 | divided_by: settings.cardGridCol | append: 'vw'
+	assign vw_s = 100 | divided_by: settings.cardGridCol-s | append: 'vw'
+-%}
+
+<x-cell class="{{ class }}" {{ hscrollElement }} prod-instock="{{ product.available }}">
+{%- comment -%} Images {%- endcomment -%}
+	<div class="card-image">
+	<a href="{{ product.url }}" {{ collectionAwareUrl }} class="no-style" tabindex="-1">
+		<div class="card-aspect-ratio"></div>
+		<div class="primary">
+			{%- capture sizes -%}(max-width:777px) {{ vw_s }}, (min-width:778px) {{ vw }}, 100vw{%- endcapture -%}
+			{%- liquid
+				assign img = product.featured_image.src
+				assign alt = img.alt | escape
+                assign width = 1280
+				assign widths = '450,550,750,950,1100,1280'
+                assign loading = loading | default: 'lazy'
+
+                if img
+				    echo '<picture>'
+					echo img | image_url: width: width | image_tag: widths: widths, sizes: sizes, loading: loading, alt: alt
+				    echo '</picture>'
+                endif
+			-%}
+		</div>
+
+		{%- if product.images[1] != null and hasHoverImg == 'hasHover' -%}
+		<div class="secondary">
+			{%- liquid
+				assign img = product.images[1]
+
+				echo '<picture>'
+				echo img | image_url: width: width | image_tag: widths: widths, sizes: sizes, loading: 'lazy', alt: alt
+				echo '</picture>'
+			-%}
+		</div>
+		{%- endif -%}
+	</a>
+	</div>
+
+{%- comment -%} Meta data {%- endcomment -%}
+	<div class="card-meta">
+		<div class="card-head">
+		<x-grid>
+			<x-cell span="1-3">
+				<x-flex direction="column">
+					<x-cell>
+                        {% if settings.cardVendor %}<div class="card-vendor">{{ product.vendor }}</div>{% endif %}
+						<h2 class="card-title h4"><a href="{{ product.url }}" {{ collectionAwareUrl }} class="no-style">{{ product.title }}</a></h2>
+					</x-cell>
+					{%- if product.metafields.descriptors.subtitle.value != blank and settings.cardSubtitle == true -%}
+					<x-cell class="card-subtitle">
+						<h3 class="h4">{{ product.metafields.descriptors.subtitle.value }}</h3>
+					</x-cell>
+					{%- endif -%}
+					{%- if settings.cardMainPrice -%}
+					<x-cell class="card-price">{%- render 'global-product-price' for product as product -%}</x-cell>
+					{%- endif -%}
+				</x-flex>
+			</x-cell>
+			<x-cell span-s="4.." span-y-s="1+1">
+				<div class="card-badge text-end">
+					{%- comment -%} You can use this spot for badges, wishlist icons etc. {%- endcomment -%}
+
+					{%- comment -%} /-/ {%- endcomment -%}
+
+					{%- unless product.available -%}
+							<span class="product-badge soldout">{{ 'product.soldOut' | t }}</span>
+					{%- else -%}
+						{%- if product.compare_at_price > product.price -%}
+							{%- liquid 
+						    	capture discount
+						    		echo product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price | prepend: '-' | append: '%'
+						    	endcapture
+					    	-%}
+							<x-flex direction="row" jc="end">
+                                {%- if settings.cardSaleType == 'label' or settings.cardSaleType == 'both' -%}
+								<span class="product-badge sale">{{ 'product.sale' | t }}</span>
+                                {%- endif -%}
+
+                                {%- if settings.cardSaleType == 'percentage' or settings.cardSaleType == 'both' -%}
+								<span class="sale-percentage">{{ discount }}</span>
+                                {%- endif -%}
+							</x-flex>
+						{%- elsif product.tags contains 'preorder' -%}
+					    	<span class="product-badge preorder">{{ 'product.preorder' | t }}</span>
+						{%- elsif product.tags contains 'new' -%}
+					    	<span class="product-badge new">{{ 'product.new' | t }}</span>
+						{%- endif -%}
+					{%- endunless -%}
+				</div>
+			</x-cell>
+		</x-grid>
+		</div>
+
+		{%- comment -%} Quick buy options {%- endcomment -%}
+		{%- if settings.cardQuickBuy == true -%}
+		<div class="card-footer">
+			{%- render 'global-product-form' for product as product -%}
+		</div>
+		{%- endif -%}
+	</div>
+</x-cell>

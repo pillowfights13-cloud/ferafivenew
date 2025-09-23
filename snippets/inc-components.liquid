@@ -1,0 +1,27 @@
+{%- comment -%}
+    This is responsible for loading Components.
+
+    Usage:
+    {%- render 'inc-components' -%}
+{%- endcomment -%}
+
+<script>
+{%- capture content %}
+window.components = {
+    "coretex-cart": "{{ 'c-cart.js' | asset_url }}",
+    "coretex-slideshow": "{{ 'c-slideshow.js' | asset_url }}",
+    "hscroll-slider": "{{ 'm-hscroll.js' | asset_url }}",
+    "video-player": "{{ 'videoplayer.js' | asset_url }}",
+    "image-comparison": "{{ 'gs-comparison.js' | asset_url }}",
+    "coretex-dialog": "{{ 'c-dialog.js' | asset_url }}",
+    "localization-form": "{{ 'localization.js' | asset_url }}",
+    "shop-the-look": "{{ 'c-shopthelook.js' | asset_url }}"
+}
+{%- endcapture -%}
+{%- liquid 
+    assign _content = content | strip_newlines | strip | replace: '    ', '' | replace: '  ', '' | replace: ' ', ''
+    echo _content
+-%}
+</script>
+
+<script>(()=>{const e=window.components||{},n=async(n,o)=>{const t=document.createElement("script");t.type="module",t.src=n,document.body.appendChild(t),t.addEventListener("error",()=>{document.querySelectorAll(o).forEach(e=>e.classList.add("no-js"))}),t.addEventListener("load",()=>{document.dispatchEvent(new CustomEvent("component-loaded",{detail:{component:o,components:e}}))})};customElements.define("component-loader",class extends HTMLElement{connectedCallback(){Object.keys(e).forEach(o=>{this.querySelector(o)&&(n(e[o],o).catch(e=>console.error(`Error loading component ${o}:`,e)),delete e[o])})}})})();</script>

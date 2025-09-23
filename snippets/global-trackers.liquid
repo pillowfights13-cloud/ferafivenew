@@ -1,0 +1,21 @@
+{% comment %}
+    Trackers/analytics are now loaded in the footer 
+    because we had problems with some of them breaking the theme 
+    when loaded in the header.
+{% endcomment %}
+
+{%- liquid 
+    if settings.pixelPinterest != blank
+        # Pinterest pixel
+        echo  settings.pixelPinterest
+    endif
+
+    if settings.pixelTikTok != blank
+        # TikTok pixel
+        echo settings.pixelTikTok
+    endif
+
+    if settings.pixelOther != blank
+        echo settings.pixelOther
+    endif 
+-%}

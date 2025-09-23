@@ -1,0 +1,103 @@
+<section id="mobmenu">
+<div class="mobnav">
+{%- comment -%} Controls {%- endcomment -%}
+<x-grid columns="2" class="header">
+	<x-cell ps="center start"><h3 class="h3 headingTitle">{{ 'header.menu' | t }}</h3></x-cell>
+	<x-cell ps="center end">
+		<button class="is-blank shrink-menu no-js-hidden">
+            <span class="visually-hidden">{{ 'header.close' | t }}</span>
+            {%- render 'global-icon' with 'x' -%}
+        </button>
+		<noscript><a href="#!" class="button is-blank shrink-search"><span class="visually-hidden">{{ 'header.close' | t }}</span>{%- render 'global-icon' with 'x' -%}</a></noscript>
+	</x-cell>
+</x-grid>
+
+<nav>
+{%- comment -%} Quick links {%- endcomment -%}
+{%- if accountLinkMob -%}
+<x-grid columns="2" class="bordi quicks">
+	{%- if customer -%}
+		<x-cell><a href="{{ routes.account_url }}">{{ 'header.account' | t }}</a></x-cell>
+		<x-cell>{{ 'header.logOut' | t | customer_logout_link }}</x-cell>
+	{%- else -%}
+		<x-cell>{{ 'header.register' | t | customer_register_link }}</x-cell>
+		<x-cell>{{ 'header.login' | t | customer_login_link }}</x-cell>
+	{%- endif -%}
+</x-grid>
+{%- endif -%}
+
+{%- comment -%} Localization {%- endcomment -%}
+{%- if localization.available_countries.size > 1 or localization.available_languages.size > 1 -%}
+{%- liquid 
+    if language_selector == blank or country_selector == blank 
+        assign count = 1
+    else
+        assign count = 2
+    endif
+-%}
+
+<x-grid columns="{{ count }}" class="bordi quicks i18n">
+    {%- if language_selector -%}
+        <x-cell><button class="is-custom text-normal dropdown-caret" data-open="#languageBox">{{ language_selector }}</button></x-cell>
+    {%- endif -%}
+
+    {%- if country_selector -%}
+    <x-cell><button class="is-custom text-normal dropdown-caret" data-open="#countryBox">{{ country_selector }}</button></x-cell>
+    {%- endif -%}
+</x-grid>
+{%- endif -%}
+
+{%- comment -%} Menu links {%- endcomment -%}
+<x-grid columns="1" class="bordi menus">
+{%- for link in linklists[linklist].links -%}
+	<x-cell>
+	<ul class="no-style">
+	{% if link.links == blank %}
+		<li><a href="{{ link.url }}" class="no-style lv1l" data-name="{{ link.title | escape }}">{{ link.title }}</a></li>
+	{% else %}
+		<li><details class="dm lv1 closex" id="Details-main-{{ forloop.index }}">
+		<summary class="dropdown-caret" data-name="{{ link.title | escape }}">{{ link.title }}</summary>
+		<details-menu id="Menu-main-{{ forloop.index }}">
+		<ul class="no-style">
+		{%- for child_link in link.links -%} 
+			{% if child_link.links == blank %}
+				<li><a href="{{ child_link.url }}" class="no-style lv1l" data-name="{{ child_link.title | escape }}">{{ child_link.title }}</a></li>
+			{%- else -%}
+				<li><details class="dm lv2 closex" id="Details-main-{{ forloop.index }}">
+				<summary class="dropdown-caret" data-name="{{ child_link.title | escape }}">{{ child_link.title }}</summary>
+				<details-menu id="Menu-main-{{ forloop.index }}">
+				<ul class="no-style">
+				{%- for grandchild_link in child_link.links -%} 
+					{%- if grandchild_link.links == blank -%}
+						<li><a href="{{ grandchild_link.url }}" class="no-style lv1l" data-name="{{ grandchild_link.title | escape }}">{{ grandchild_link.title }}</a></li>
+					{%- else -%}
+						<li><details class="dm lv3 closex" id="Details-main-{{ forloop.index }}">
+						<summary class="dropdown-caret" data-name="{{ grandchild_link.title | escape }}">{{ grandchild_link.title }}</summary>
+						<details-menu id="Menu-main-{{ forloop.index }}">
+						<ul class="no-style">
+						{%- for grandgrandchild_link in grandchild_link.links -%} 
+							{%- if grandgrandchild_link.links == blank -%}
+								<li><a href="{{ grandgrandchild_link.url }}" class="no-style" data-name="{{ grandgrandchild_link.title | escape }}">{{ grandgrandchild_link.title }}</a></li>
+							{%- endif -%}
+						{%- endfor -%}
+						</ul>
+						</details-menu>
+						</details></li>
+					{%- endif -%}
+				{%- endfor -%}
+				</ul>
+				</details-menu>
+				</details></li>
+			{%- endif-%}
+			{%- endfor -%}
+		</ul>
+		</details-menu>
+		</details></li>
+	{% endif %}
+	</ul>
+	</x-cell>
+{%- endfor -%}
+</x-grid>
+</nav>
+</div>
+</section>

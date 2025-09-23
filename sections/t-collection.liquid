@@ -1,0 +1,202 @@
+{%- assign prodXpage = section.settings.prodXpage -%}
+{%- paginate collection.products by prodXpage -%}
+
+<div class="listing-page">
+<div class="products">
+
+    {% if linklists[section.settings.suggestedLinklist].links != empty %}
+    <div class="listoftags listofsuggested">
+        <div class="mob-scroller">
+            {%- for link in linklists[section.settings.suggestedLinklist].links -%}
+            <a href="{{ link.url }}" class="no-style">{{ link.title }}</a>
+            {%- endfor -%}
+        </div>
+    </div>
+    {% endif %}
+
+    {%- if section.settings.collection_list != empty -%}
+    <div class="listoftags listofcolselected">
+        <div class="mob-scroller">{%- for collection in section.settings.collection_list -%}<a href="{{ collection.url }}">{{ collection.title | escape }}</a>{%- endfor -%}</div>
+    </div>
+    {%- endif -%}
+
+    {%- if section.settings.quickTags == true and collection.tags != empty -%}
+    <div class="listoftags">
+      <div class="mob-scroller">{%- for tag in collection.tags -%} {{ tag | link_to_tag: tag }} {%- endfor -%}</div>
+    </div>
+    {%- endif -%}
+
+    <section class="intro">
+        <x-grid columns="3" columns-m="3" columns-s="1">
+            {%- liquid 
+                if collection.image
+                    assign img = collection.image
+                    assign imgType = 'feat'
+                endif
+            -%}
+            {%- if img != nil and section.settings.showFeatImg == true -%}
+            <x-cell span="row" class="center-axyz featuredMedia {{ imgType }}">
+            <picture class="featured">
+                {%- liquid
+                    assign alt = collection.title | escape
+                    assign widths = '750,1000,1280,1500,1750,2000,2500,2750'
+                    assign sizes = '(min-width: 777px) 100vw, 100vw'
+                    render 'global-img' img: img, alt: alt, width: 2750, widths: widths, sizes: sizes, loading: 'eager'
+                -%}
+            </picture>
+            </x-cell>
+            {%- endif -%}
+            <x-cell><h1>{{ collection.title }}</h1></x-cell>
+            <x-cell span-s="row">
+                {%- if collection.description != empty and section.settings.showDescription -%}
+                    <div class="rte">{{ collection.description }}</div>
+                {%- endif -%}
+            </x-cell>
+            <x-cell span-s="row" class="filterBlock">
+            {%- liquid
+                if section.settings.showFilters
+                    render 'global-filters', results: collection 
+                endif
+            -%}
+            </x-cell>
+        </x-grid>
+    </section>
+
+    <section class="product">
+        <x-grid 
+            id="ajaxSection"
+            class="cards"
+            columns="{{ settings.cardGridCol }}"
+            columns-m="{{ settings.cardGridCol-m }}"
+            columns-s="{{ settings.cardGridCol-s }}"
+            card-type="{{ settings.cardTypeOf }}"
+            card-ratio="{{ settings.cardRatio }}"
+            card-quickbuy="{{ settings.cardQuickBuy }}"
+            card-quickbuy-hover="{{ settings.cardHoverQuickBuy }}"
+            card-quickbuy-float="{{ settings.cardFloatQuickBuy }}"
+            card-img-crop="{{ settings.cardImgCrop }}"
+            card-img-radius="{{ settings.cardImgRadius }}"
+            card-img-padding="{{ settings.cardImgPadding }}"
+        >
+            {% for product in collection.products %}
+                {%- liquid
+                    assign loading = 'eager'
+                    if forloop.index > 5
+                        assign loading = 'lazy'
+                    endif
+                
+                    render 'global-product-card', product: product, loading: loading
+                -%}
+            {% else %}
+                <x-cell span="row" style="height:50vh" class="text-center center-axyz">
+                    <h1>{{ 'collection.noMatches' | t }}</h1>
+                </x-cell>
+            {% endfor %}
+        </x-grid>
+    </section>
+    {%- comment -%} Pagination {%- endcomment -%}
+    {%- render 'global-pagination', paginate: paginate, section: section -%}
+</div>
+</div>
+{%- if section.settings.pagination != 'classic' -%}
+<script type="module">
+import { InfiniScroll } from '{{ 'infiniscroll.min.js' | asset_url }}';
+
+InfiniScroll({
+    itemsContainerSelector: '#ajaxSection',
+    paginationContainerSelector: '#ajaxPagination',
+    loadingText: '{{ 'collection.loading' | t }}',
+    debug: false,
+}).start();
+</script>
+{%- endif -%}
+{%- endpaginate -%}
+
+{% schema %}
+{
+  "name": "Collection",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Collection banner"
+    },
+    {
+      "type": "checkbox",
+      "id": "showFeatImg",
+      "label": "Show collection image",
+      "default": false,
+      "info": "1200 x 500px recommended"
+    },
+    {
+        "type": "header",
+        "content": "Page information"
+    },
+    {
+        "type": "checkbox",
+        "id": "showDescription",
+        "label": "Show page description",
+        "default": true
+    },
+    {
+        "type": "checkbox",
+        "id": "showFilters",
+        "label": "Show page filters",
+        "info": "Allow your customers to filter collections and search results by product availability, price, color, and more. [Learn more...](https://help.shopify.com/en/manual/online-store/themes/customizing-themes/storefront-filters#add-filters)",
+        "default": true
+    },
+    {
+        "type": "header",
+        "content": "Links"
+      },
+      {
+        "type": "link_list",
+        "id": "suggestedLinklist",
+        "label": "Suggested links",
+        "info": "Display a list of suggested links."
+      },
+      {
+        "type": "collection_list",
+        "id": "collection_list",
+        "label": "Suggested collections",
+        "limit": 20,
+        "info": "Returns a list of selected collections."
+      },
+      {
+        "type": "checkbox",
+        "id": "quickTags",
+        "label": "Show quick tags",
+        "default": false,
+        "info": "Returns all tags available to current collection."
+      },
+    {
+        "type": "header",
+        "content": "Pagination"
+      },
+      {
+        "type": "select",
+        "id": "pagination",
+        "label": "Pagination type",
+        "default": "classic",
+        "options": [
+          {
+            "value": "classic",
+            "label": "Numbers"
+          },
+          {
+            "value": "scroll",
+            "label": "Load on scroll"
+          }
+        ]
+      },
+      {
+        "type": "range",
+        "label": "Products per page",
+        "id": "prodXpage",
+        "min": 3,
+        "max": 30,
+        "step": 3,
+        "default": 9
+      }
+  ]
+}
+{% endschema %}

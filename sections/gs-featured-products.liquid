@@ -1,0 +1,135 @@
+{%- liquid
+    assign collection = section.settings.product_list
+    assign totalProducts = collection.count | plus: 0
+
+    assign collectionUrl = section.settings.url
+
+    assign collectionTitle = section.settings.heading
+-%}
+
+<section class="products product">
+{%- liquid
+    assign scrollerState = section.settings.horizontalScroller
+
+    case scrollerState
+    when "desk"
+
+        assign horizontalScroll = nil
+        assign hscrollSlide = nil
+        if totalProducts > 3
+            assign horizontalScroll = 'card scroll-snap'
+            assign hscrollSlide = true
+        endif
+
+    when "mob"
+        assign horizontalScroll = 'card scroll-snap-m'
+        assign hscrollSlide = true
+
+    when "both"
+
+        assign horizontalScroll = 'card scroll-snap-m'
+        if totalProducts > 3
+            assign horizontalScroll = 'card scroll-snap scroll-snap-m'
+            assign hscrollSlide = true
+        endif
+
+    else 
+        assign horizontalScroll = nil
+        assign hscrollSlide = nil
+    endcase
+-%}
+{%- comment -%} hscroll-slider {%- endcomment -%}
+{%- if hscrollSlide != nil -%}<hscroll-slider>{%- endif -%}
+{%- if collectionTitle != empty -%}
+<div class="gs-title" x-flex ai="center" jc="between">
+    <x-cell><h3>{{ collectionTitle }}</h3></x-cell>
+    {%- if hscrollSlide != nil -%}<x-flex ai="center" jc="between" style="gap:var(--margin)">
+        <button class="is-blank" style="padding:0" hscroll-button-prev aria-label="{{ 'pagination.previous' | t }}">
+            {%- render 'global-icon' with 'arrow-left' -%}
+        </button>
+        <button class="is-blank" style="padding:0" hscroll-button-next aria-label="{{ 'pagination.next' | t }}">
+            {%- render 'global-icon' with 'arrow-right' -%}
+        </button>
+    </x-flex>{%- endif -%}
+</div>
+{%- endif -%}
+
+<x-grid 
+    {% if hscrollSlide != nil %}hscroll-area{% endif %}
+    class="cards {{ horizontalScroll }}"
+    columns="{{ settings.cardGridCol }}"
+    columns-m="{{ settings.cardGridCol-m }}"
+    columns-s="{{ settings.cardGridCol-s }}"
+    card-type="{{ settings.cardTypeOf }}"
+    card-ratio="{{ settings.cardRatio }}"
+    card-quickbuy="{{ settings.cardQuickBuy }}"
+    card-quickbuy-hover="{{ settings.cardHoverQuickBuy }}"
+    card-quickbuy-float="{{ settings.cardFloatQuickBuy }}"
+    card-img-crop="{{ settings.cardImgCrop }}"
+    card-img-radius="{{ settings.cardImgRadius }}"
+    card-img-padding="{{ settings.cardImgPadding }}"
+>
+{%- liquid
+    for product in collection
+        render "global-product-card" for product as product, hscrollElement: 'hscroll-slide'
+    else 
+        # If no products in store show placeholder x3
+        for i in (1..3)
+            render "global-product-card-placeholder"
+        endfor
+    endfor
+-%}
+
+</x-grid>
+{%- comment -%} hscroll-slider buttons {%- endcomment -%}
+{%- if hscrollSlide != nil -%}
+</hscroll-slider>
+{%- comment -%} / hscroll-slider {%- endcomment -%}
+{%- endif -%}
+
+{%- if collectionUrl != blank -%}
+<div class="loadmore"><a href="{{ collectionUrl }}" class="no-style">{{ 'collection.ViewAllProducts' | t }}</a></div>
+{%- endif -%}
+</section>
+
+{% schema %}
+{
+  "name": "Featured products",
+  "disabled_on": { "groups": ["header", "footer", "aside"] },
+  "presets": [
+    { "name": "Featured products" }
+  ],
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Featured products",
+      "info": "Leave blank to remove heading."
+    },
+    {
+      "type": "url",
+      "id": "url",
+      "label": "Button link"
+    },
+    {
+      "type": "product_list",
+      "id": "product_list",
+      "label": "Products",
+      "limit": 12
+    },
+    {
+        "type": "select",
+        "id": "horizontalScroller",
+        "label": "Enable horizontal scroll",
+        "default": "none",
+        "options": [
+            { "value": "none", "label": "None" },
+            { "value": "desk", "label": "Desktop" },
+            { "value": "mob", "label": "Mobile" },
+            { "value": "both", "label": "Desktop and mobile" }
+        ]
+    }
+  ]
+}
+{% endschema %}

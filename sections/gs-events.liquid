@@ -1,0 +1,138 @@
+<section class="events">
+    <h3 class="gs-title">{{ 'events.events' | t }}</h3>
+    <x-grid columns="6" class="eventHeader large-only" style="gap:var(--padding)">
+        <x-cell span="2+2">{{ 'events.info' | t }}</x-cell>
+        <x-cell>{{ 'events.date' | t }}</x-cell>
+        <x-cell>{{ 'events.location' | t }}</x-cell>
+        <x-cell>{{ 'events.moreInfo' | t }}</x-cell>
+    </x-grid>
+    {%- for block in section.blocks -%}
+    <x-grid columns="6" columns-s="2" class="event" event-expired="{{ block.settings.expired }}" style="gap:var(--padding)" {{ block.shopify_attributes }}>
+            <x-cell class="flyer">
+            {% if block.settings.img != blank %}
+                <picture>
+                {% assign img = block.settings.img %}
+                {{ img | image_url: width: 777 | image_tag: width: 777, height: img.height, loading: 'lazy', alt: img.alt | escape }}
+                </picture>
+            {%- else -%}
+                {{ 'image' | placeholder_svg_tag: 'square' }}
+            {%- endif -%}
+            </x-cell>
+            <x-cell span="2" span-s="row" class="what">
+                {% if block.settings.name %}<h3>{{ block.settings.name }}</h3>{% endif %}
+                {% if block.settings.desc %}<p class="rte">{{ block.settings.desc }}</p>{% endif %}
+            </x-cell>
+            <x-cell class="when">
+            <x-flex style="gap:calc(var(--margin) * 1)">
+                <x-cell>{% render 'global-icon' with 'calendar' %}</x-cell>
+                <x-cell>
+                    {% if block.settings.expired %}<div class="expired"><strong>{{ 'events.expired' | t }}</strong></div>{% endif %}
+                    <span class="date">{{ block.settings.date }}</span>
+                    <span class="time">{{ block.settings.time }}</span>
+                </x-cell>
+            </x-flex>
+            </x-cell>
+            {% if block.settings.location %}
+                <x-cell class="where">
+                <x-flex style="gap:calc(var(--margin) * 1)">
+                    <x-cell>{% render 'global-icon' with 'location' %}</x-cell>
+                    <x-cell><a href="{{ block.settings.locationOnMaps }}" target="_blank" rel="noreferrer nofollow">{{ block.settings.location }}</a></x-cell>
+                </x-flex>
+                </x-cell>
+            {% endif %}
+            {% if block.settings.moreInfo %}
+                <x-cell class="moreInfo"><a href="{{ block.settings.moreInfo }}" target="_blank" rel="noreferrer nofollow">{{ 'events.moreInfo' | t }}</a></x-cell>
+            {% endif %}
+    </x-grid>
+    {%- endfor -%}
+{%- if section.settings.all != empty -%}
+    <div class="loadmore"><a href="{{ section.settings.link }}" class="no-style">{{ section.settings.all }}</a></div>
+{%- endif -%}
+</section>
+
+{% schema %}
+{
+  "name": "Events",
+  "disabled_on": { "groups": ["header", "footer", "aside"] },
+  "settings": [
+    {
+      "type": "text",
+      "id": "all",
+      "label": "Button label",
+      "default": "View all events"
+    },
+    {
+      "id": "link",
+      "type": "url",
+      "label": "Button link"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "event",
+      "name": "Event",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "img",
+          "label": "Flyer",
+          "info": "1:1 aspect ration (recommended)"
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Name",
+          "default": "Event name"
+        },
+        {
+          "type": "richtext",
+          "id": "desc",
+          "label": "Description"
+        },
+        {
+          "type": "text",
+          "id": "date",
+          "label": "Date",
+          "default": "Friday, 31/12/3000"
+        },
+        {
+          "type": "text",
+          "id": "time",
+          "label": "Time",
+          "default": "18:30"
+        },
+        {
+          "type": "richtext",
+          "id": "location",
+          "label": "Location name",
+          "default": "<p>Event location name</p>"
+        },
+        {
+          "type": "url",
+          "id": "locationOnMaps",
+          "label": "Location map"
+        },
+        {
+          "type": "url",
+          "id": "moreInfo",
+          "label": "More info button"
+        },
+        {
+          "type": "checkbox",
+          "id": "expired",
+          "label": "Expired event",
+          "default": false
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Event",
+      "blocks": [
+        { "type": "event" }
+      ]
+    }
+  ]
+}
+{% endschema %}

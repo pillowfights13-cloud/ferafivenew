@@ -1,0 +1,196 @@
+<section
+    class="image-text"
+    style="--imageTextBg:{{ section.settings.background }};--imageTextColor:{{ section.settings.color }}"
+>
+    <x-grid columns="2" columns-s="1">
+        <x-cell order="{{ section.settings.alignment }}" order-s="1" class="text-center">
+            {%- liquid
+                assign vid = section.settings.video
+
+                assign loop = true
+                assign autoplay = true
+                assign muted = true
+                assign clickToPlay = true
+                assign controls = false
+
+                render 'global-video', vid: vid, loop: loop, autoplay: autoplay, muted: muted, clickToPlay: clickToPlay, controls: controls
+            -%}
+        </x-cell>
+
+        <x-cell order="2" order-s="1" class="meta border-{% if section.settings.alignment == "1" %}left{% else %}right{% endif %}">
+            <x-flex direction="column" jc="{{ section.settings.textAlignment }}" style="gap:var(--padding)">
+                {%- for block in section.blocks -%}
+                    {% case block.type %}
+                        {%- when 'heading' -%}
+                            <x-cell {{ block.shopify_attributes }}>
+                                <h2>{{ block.settings.heading | escape }}</h2>
+                            </x-cell>
+                        {%- when 'text' -%}
+                            <x-cell {{ block.shopify_attributes }}>
+                                <div class="rte">{{ block.settings.text }}</div>
+                            </x-cell>
+                        {%- when 'button' -%}
+                            {%- if block.settings.button_label != blank -%}
+                                <x-cell
+                                    style="--buttonBgColor:{{ block.settings.buttonBg }};--buttonColor:{{ block.settings.buttonColor }};"
+                                    {{ block.shopify_attributes }}
+                                >
+                                    <a href="{{ block.settings.button_link }}" class="button">{{ block.settings.button_label | escape }}</a>
+                                </x-cell>
+                            {%- endif -%}
+                    {%- endcase -%}
+                {%- endfor -%}
+            </x-flex>
+        </x-cell>
+    </x-grid>
+</section>
+
+{% schema %}
+{
+    "name": "Video with text",
+    "disabled_on": { "groups": ["header", "footer", "aside"] },
+    "presets": [
+        {
+            "name": "Video with text",
+            "blocks": [
+                {
+                    "type": "heading"
+                },
+                {
+                    "type": "text"
+                },
+                {
+                    "type": "button"
+                }
+            ]
+        }
+    ],
+    "settings": [
+        {
+            "type": "video",
+            "id": "video",
+            "label": "Video"
+        },
+        {
+            "type": "select",
+            "id": "alignment",
+            "label": "Desktop video position",
+            "info": "Video first is the default mobile layout.",
+            "default": "1",
+            "options": [
+                {
+                    "value": "1",
+                    "label": "Left"
+                },
+                {
+                    "value": "3",
+                    "label": "Right"
+                }
+            ]
+        },
+        {
+            "type": "header",
+            "content": "Text"
+        },
+        {
+            "type": "select",
+            "id": "textAlignment",
+            "label": "Desktop text position",
+            "default": "start",
+            "options": [
+                {
+                    "value": "start",
+                    "label": "Top"
+                },
+                {
+                    "value": "center",
+                    "label": "Center"
+                },
+                {
+                    "value": "end",
+                    "label": "Bottom"
+                }
+            ]
+        },
+        {
+            "type": "header",
+            "content": "Appearance"
+        },
+        {
+            "type": "color",
+            "id": "background",
+            "label": "Background color",
+            "default": "rgba(0,0,0,0)"
+        },
+        {
+            "type": "color",
+            "id": "color",
+            "label": "Text color",
+            "default": "#000000"
+        }
+    ],
+    "blocks": [
+        {
+            "type": "heading",
+            "name": "Heading",
+            "limit": 1,
+            "settings": [
+                {
+                    "type": "text",
+                    "id": "heading",
+                    "label": "Heading",
+                    "default": "Video with text"
+                }
+            ]
+        },
+        {
+            "type": "text",
+            "name": "Text",
+            "limit": 1,
+            "settings": [
+                {
+                    "type": "richtext",
+                    "id": "text",
+                    "label": "Description",
+                    "default": "<p>Pair text with a vieo to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.</p>"
+                }
+            ]
+        },
+        {
+            "type": "button",
+            "name": "Button",
+            "limit": 1,
+            "settings": [
+                {
+                    "type": "text",
+                    "id": "button_label",
+                    "label": "Label",
+                    "default": "Button label",
+                    "info": "Leave the label blank to hide the button."
+                },
+                {
+                    "type": "url",
+                    "id": "button_link",
+                    "label": "Link"
+                },
+                {
+                    "type": "header",
+                    "content": "Appearance"
+                },
+                {
+                    "type": "color",
+                    "id": "buttonBg",
+                    "label": "Button background color",
+                    "default": "#000000"
+                },
+                {
+                    "type": "color",
+                    "id": "buttonColor",
+                    "label": "Button text color",
+                    "default": "#FFFFFF"
+                }
+            ]
+        }
+    ]
+}
+{% endschema %}

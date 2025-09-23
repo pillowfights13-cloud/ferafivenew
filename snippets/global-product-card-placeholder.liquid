@@ -1,0 +1,39 @@
+<x-cell>
+{%- comment -%} Images {%- endcomment -%}
+	<div class="card-image">
+	<a href="#!" class="no-style" tabindex="-1">
+		<div class="card-aspect-ratio"></div>
+		<div class="primary">
+			<picture>
+				<img src="https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-image_large.png?format=webp" alt="Product title" width="480" height="480" loading="lazy">
+			</picture>
+		</div>
+	</a>
+	</div>
+
+{%- comment -%} Meta data {%- endcomment -%}
+	<div class="card-meta">
+		<div class="card-head">
+		<x-grid columns-s="1">
+			<x-cell span="1-3">
+				<x-flex direction="column">
+					<x-cell>
+						<h2 class="card-title h6">
+							<a href="#!" class="no-style">Product title</a>
+						</h2>
+					</x-cell>
+					<x-cell class="card-subtitle"><p>Product subtitle</p></x-cell>
+					<x-cell class="card-price"><div><div><span class="new-price">{{ cart.currency.symbol | append: '100' }}</span></div></div></x-cell>
+				</x-flex>
+			</x-cell>
+		</x-grid>
+		</div>
+
+		{%- comment -%} Quick buy options {%- endcomment -%}
+		<div class="card-footer">
+		<button class="is-primary soldoutButton" disabled>
+			<span class="cartPriceAdd">{{ 'product.soldOut' | t }}</span>
+		</button>
+		</div>
+	</div>
+</x-cell>

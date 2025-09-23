@@ -1,0 +1,95 @@
+
+<!-- OpenThinking SEO Engine -->
+{% comment %} Assign Global variables {% endcomment -%}
+{% liquid
+capture SEOTitle
+	# Search page
+    if request.page_type == 'search' and search.performed == true
+    	echo search.terms | escape | strip
+    else
+    	echo page_title
+    endif
+
+	# Tag page
+	if current_tags
+    	assign meta_tags = current_tags | join: ', ' 
+    	echo settings.titleSeparatorSEO 
+		echo '&nbsp;'
+    	echo 'general.meta.tags' | t: tags: meta_tags
+	endif
+
+	# Pagination page 
+	if current_page != 1
+	    echo '&nbsp; '	
+        echo settings.titleSeparatorSEO 
+		echo '&nbsp; '
+		echo 'general.meta.page' | t: page: current_page
+	endif 
+
+	# Site name
+	assign escaped_page_title = page_title | escape
+	unless escaped_page_title contains shop.name
+		echo '&nbsp;'
+		if request.page_type != 'password'
+			echo settings.titleSeparatorSEO
+		endif
+		echo '&nbsp;'
+		echo shop.name
+	endunless
+endcapture 
+
+# Default variables
+assign maxmeta = 160 
+assign og_title = page_title | escape
+assign og_url = canonical_url
+assign og_type = 'website'
+assign og_description = page_description | default: shop.description | default: shop.name
+
+# End Default variables
+assign og_title = page_title | default: shop.name
+assign og_url = canonical_url | default: request.origin
+assign og_type = 'website'
+assign og_description = page_description | default: shop.description | default: shop.name
+  
+if request.page_type == 'product'
+    assign og_type = 'product'
+elsif request.page_type == 'article'
+    assign og_type = 'article'
+elsif request.page_type == 'password'
+    assign og_url = request.origin
+endif
+-%}
+
+{%- comment -%} Building meta {%- endcomment -%}
+<title>{{ SEOTitle | strip | strip_newlines }}</title>
+<link rel="canonical" href="{{ canonical_url }}">
+<meta name="description" content="{{ og_description | truncate: maxmeta | escape }}">
+<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+<meta name="theme-color" content="{{ settings.bgColor }}">
+<meta name="ferafive" property="OpenThinking" content="https://ferafive.com/">
+<meta name="designer" content="OpenThinking">
+<meta property="og:site_name" content="{{ shop.name }}">
+<meta property="og:url" content="{{ og_url }}">
+<meta property="og:title" content="{{ og_title }}">
+<meta property="og:type" content="{{ og_type }}">
+<meta property="og:description" content="{{ og_description | truncate: maxmeta | escape }}">
+{%- if request.page_type == 'product' -%}
+<meta property="og:price:amount" content="{{ product.price | money_without_currency | strip_html }}">
+<meta property="og:price:currency" content="{{ cart.currency.iso_code }}">
+{%- endif -%}
+{%- if page_image -%}
+<meta property="og:image" content="http:{{ page_image | image_url }}">
+<meta property="og:image:secure_url" content="https:{{ page_image | image_url }}">
+<meta property="og:image:width" content="{{ page_image.width }}">
+<meta property="og:image:height" content="{{ page_image.height }}">
+{%- endif -%}
+{%- if settings.socialTwitter != blank -%}
+<meta name="twitter:site" content="{{ settings.socialTwitter | split: 'x.com/' | last | prepend: '@' }}">
+{%- endif %}
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{ og_title }}">
+<meta name="twitter:description" content="{{ og_description | strip_html | strip_newlines | truncate: maxmeta | escape }}">
+<meta name="ot:id" content="ba22326d40dbd392ea828ea3848766ad">
+{%- comment -%} json-ld {%- endcomment -%}
+{%- render 'global-json' %}
+<!-- / OpenThinking SEO Engine -->

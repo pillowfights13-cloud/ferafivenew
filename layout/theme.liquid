@@ -1,0 +1,134 @@
+<!doctype html>
+<html
+  lang="{{ request.locale.iso_code }}"
+  dir="{% render 'global-dir' %}"
+  {% if template == 'page.faq' %}
+  itemscope
+  itemtype="https://schema.org/FAQPage"
+  {% endif %}
+  class="no-js">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+    {%- render 'global-meta' -%}
+
+    {% # theme-check-disable AssetPreload %}
+    {%- unless settings.bodyFontFamily.system? -%}
+      <link
+        rel="preload"
+        as="font"
+        href="{{ settings.bodyFontFamily | font_url }}"
+        type="font/woff2"
+        crossorigin>
+    {%- endunless -%}
+    {%- unless settings.headingsFontFamily.system? -%}
+      <link
+        rel="preload"
+        as="font"
+        href="{{ settings.headingsFontFamily | font_url }}"
+        type="font/woff2"
+        crossorigin>
+    {%- endunless -%}
+    {% # theme-check-enable AssetPreload %}
+
+    {%- if settings.favicon != blank -%}
+      <link rel="shortcut icon" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
+      <link rel="apple-touch-icon-precomposed" href="{{ settings.favicon | image_url: width: 250, height: 250 }}">
+    {%- endif -%}
+
+    <script>
+      document.documentElement.className = 'js';
+  </script>
+
+    <!-- BEGIN content_for_header -->
+    {{ content_for_header }}
+    <!-- END content_for_header -->
+
+    {%- liquid
+      echo 'skelet.css' | asset_url | stylesheet_tag
+
+      render 'global-css-vars'
+
+      if settings.useCustomFont
+        render 'global-fonts'
+      endif
+
+      echo 'app.css' | asset_url | stylesheet_tag
+    -%}
+    {% # theme-check-disable %}
+    {%- if settings.css != blank -%}
+      <style id="bUserCSS">{{ settings.css | replace: '<style>' '' | replace: '</style>' '' }}
+      </style>
+    {%- endif -%}
+  {% # theme-check-enable %}
+  </head>
+  <body
+    class="t-{{ template.name }} ip{{ settings.imgPadding }}"
+    layout-boxed="{{ settings.boxedLayout }}"
+    pid="{{ request.path }}">
+    <a href="#mainContent" class="skip-to-content button is-primary visually-hidden">{{ "general.accessibility.skip_to_text" | t }}</a>
+    <component-loader id="app">
+      {%- sections 'group-header' -%}
+      <main id="mainContent">
+        {%- render 'global-breadcrumbs' -%}
+        {{ content_for_layout }}
+      </main>
+      {%- liquid
+        sections 'group-footer'
+        sections 'group-overlay'
+      -%}
+    </component-loader>
+
+    {% # theme-check-disable %}
+    {%- # Cart -%}
+    <script type="application/json" data-ajax-cart-initial-state>
+      {{- cart | json -}}
+    </script>
+
+    {%- # Global -%}
+    <script src="{{ 'app.js' | asset_url }}"></script>
+
+    {%- # Instantpage -%}
+    <script src="{{ 'm-instantpage.min.js' | asset_url }}" type="module"></script>
+
+    {%- if request.design_mode -%}
+      <script
+        src="{{ 'h-editor.js' | asset_url }}"
+        id="coretex-theme-editor"
+        data-id="{{ shop.id }}"
+        data-contact="{{ shop.email }}"></script>
+    {%- endif -%}
+    {% # theme-check-enable %}
+
+    <script>
+      window.shopUrl = '{{ request.origin }}';
+      window.routes = { cart_add_url: '{{ routes.cart_add_url }}', cart_change_url: '{{ routes.cart_change_url }}', cart_update_url: '{{ routes.cart_update_url }}', cart_url: '{{ routes.cart_url }}', predictive_search_url: '{{ routes.predictive_search_url }}' };
+      window.cartStrings = { error: `{{ 'cart.cart_error' | t }}`, quantityError: `{{ 'cart.cart_quantity_error_html' | t }}` };
+      window.variantStrings = { addToCart: `{{ 'product.addToCart' | t }}`, preOrder: `{{ 'product.preorder' | t }}`, soldOut: `{{ 'product.soldOut' | t }}`, unavailable: `{{ 'product.unavailable' | t }}`, unavailable_with_option: `{{ 'product.value_unavailable' | t: option_value: '[value]' }}` };
+    </script>
+
+    {%- liquid
+      # Loading the Language dialog
+      if localization.available_languages.size > 1
+        render 'global-localization', type: 'language'
+      endif
+
+      # Loading the Country/region dialog
+      if localization.available_countries.size > 1
+        render 'global-localization', type: 'country'
+      endif
+    -%}
+
+    {%- render 'inc-components' -%}
+
+    {% # theme-check-disable %}
+    {%- if settings.js != blank -%}
+      <script id="bUserJS">
+        {{ settings.js | replace: '<script>' '' | replace: '</script>' '' }}
+      </script>
+  {%- endif -%}
+    {% # theme-check-enable %}
+    {%- render 'global-trackers' %}
+  </body>
+</html>

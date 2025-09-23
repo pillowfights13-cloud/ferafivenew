@@ -1,0 +1,154 @@
+{%- liquid
+    assign collections = section.settings.collection_list
+    assign totalCollections = collections.count | plus: 0
+
+    assign collectionUrl = section.settings.url
+    assign collectionUrlLabel = section.settings.label
+
+    assign collectionTitle = section.settings.heading
+
+    assign collectionCount = section.settings.collectionCount
+-%}
+
+<section class="products product">
+{%- liquid
+    assign scrollerState = section.settings.horizontalScroller
+
+    case scrollerState
+    when "desk"
+
+        assign horizontalScroll = nil
+        assign hscrollSlide = nil
+        if totalCollections > 3
+            assign horizontalScroll = 'card scroll-snap'
+            assign hscrollSlide = true
+            assign hscrollRun = 'desktop'
+        endif
+
+    when "mob"
+        assign horizontalScroll = 'card scroll-snap-m'
+        assign hscrollSlide = true
+        assign hscrollRun = 'mobile'
+
+    when "both"
+
+        assign horizontalScroll = 'card scroll-snap-m'
+        if totalCollections > 3
+            assign horizontalScroll = 'card scroll-snap scroll-snap-m'
+            assign hscrollSlide = true
+            assign hscrollRun = 'both'
+        endif
+
+    else 
+        assign horizontalScroll = nil
+        assign hscrollSlide = nil
+    endcase
+-%}
+
+{%- comment -%} hscroll-slider {%- endcomment -%}
+{%- if hscrollSlide != nil -%}<hscroll-slider data-run="{{ hscrollRun }}">{%- endif -%}
+{%- if collectionTitle != empty -%}
+<div class="gs-title" x-flex ai="center" jc="between">
+    <x-cell><h3>{{ collectionTitle }}</h3></x-cell>
+    {%- if hscrollSlide != nil -%}<x-flex ai="center" jc="between" style="gap:var(--margin)">
+        <button class="is-blank" style="padding:0" hscroll-button-prev aria-label="{{ 'pagination.previous' | t }}">
+            {%- render 'global-icon' with 'arrow-left' -%}
+        </button>
+        <button class="is-blank" style="padding:0" hscroll-button-next aria-label="{{ 'pagination.next' | t }}">
+            {%- render 'global-icon' with 'arrow-right' -%}
+        </button>
+    </x-flex>{%- endif -%}
+</div>
+{%- endif -%}
+
+<x-grid 
+    {% if hscrollSlide != nil %}hscroll-area{% endif %}
+    class="cards {{ horizontalScroll }}"
+    columns="{{ settings.cardGridCol }}"
+    columns-m="{{ settings.cardGridCol-m }}"
+    columns-s="{{ settings.cardGridCol-s }}"
+    card-type="{{ settings.cardTypeOf }}"
+    card-ratio="{{ settings.cardRatio }}"
+    card-quickbuy="{{ settings.cardQuickBuy }}"
+    card-quickbuy-hover="{{ settings.cardHoverQuickBuy }}"
+    card-quickbuy-float="{{ settings.cardFloatQuickBuy }}"
+    card-img-crop="{{ settings.cardImgCrop }}"
+    card-img-radius="{{ settings.cardImgRadius }}"
+    card-img-padding="{{ settings.cardImgPadding }}"
+>
+{%- liquid
+    for collection in collections
+        assign img = collection.featured_image
+        render 'global-collection-card', img: img, collection: collection, collectionCount: collectionCount, placeholder: false, hscrollElement: 'hscroll-slide'
+    else 
+        render 'global-collection-card', placeholder: true
+    endfor
+-%}
+</x-grid>
+
+{%- comment -%} hscroll-slider buttons {%- endcomment -%}
+{%- if hscrollSlide != nil -%}
+</hscroll-slider>
+{%- comment -%} / hscroll-slider {%- endcomment -%}
+{%- endif -%}
+
+{%- if collectionUrl != blank -%}
+<div class="loadmore"><a href="{{ collectionUrl }}" class="no-style">{{ collectionUrlLabel }}</a></div>
+{%- endif -%}
+</section>
+
+{% schema %}
+{
+  "name": "Featured collections",
+  "class": "feat-collections",
+  "disabled_on": { "groups": ["header", "footer", "aside"] },
+  "presets": [
+    { "name": "Featured collections" }
+  ],
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Featured collections",
+      "info": "Leave blank to remove heading."
+    },
+    {
+      "type": "url",
+      "id": "url",
+      "label": "Button link",
+      "info": "Leave blank to remove button."
+    },
+    {
+        "type": "text",
+        "id": "label",
+        "label": "Button label",
+        "default": "View all collections"
+    },
+    {
+        "type": "checkbox",
+        "id": "collectionCount",
+        "label": "Show collection product count",
+        "default": true
+    },
+    {
+      "type": "collection_list",
+      "id": "collection_list",
+      "label": "Collections",
+      "limit": 12
+    },
+    {
+        "type": "select",
+        "id": "horizontalScroller",
+        "label": "Enable horizontal scroll",
+        "default": "none",
+        "options": [
+            { "value": "none", "label": "None" },
+            { "value": "desk", "label": "Desktop" },
+            { "value": "mob", "label": "Mobile" },
+            { "value": "both", "label": "Desktop and mobile" }
+        ]
+    }
+  ]
+}
+{% endschema %}

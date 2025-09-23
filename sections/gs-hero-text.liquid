@@ -1,0 +1,109 @@
+<section class="hero-text" style="--heroTextBg:{{ section.settings.background }}; --heroTextAlign: {{ section.settings.alignment }}; --heroTextButtonBg: {{ section.settings.buttonBg }}; --heroTextButtonColor: {{ section.settings.buttonColor }};--heroTextFontSizeMob:{{ section.settings.sizeMob }}px;">
+	<div class="cta" style="--heroTextFontSize:{{ section.settings.size }}px;--heroTextFontHeight:{{ section.settings.lineHeight }};--heroTextFontColor:{{ section.settings.color }}">{{ section.settings.body }}</div>
+	{%- if section.settings.cta != blank -%}
+	<a href="{{ section.settings.url }}" class="button">{{ section.settings.cta }}</a>
+	{%- endif -%}
+</section>
+
+{% schema %}
+{
+  "name": "Hero text",
+  "disabled_on": { "groups": ["header", "footer", "aside"] },
+  "presets": [
+    {
+      "name": "Hero text"
+    }
+  ],
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "body",
+      "label": "Heading",
+      "default": "<p>Use this section to describe a product or welcome your customers.</p>"
+    },
+    {
+      "type": "text",
+      "id": "cta",
+      "label": "Button label",
+      "default": "Button label"
+    },
+    {
+      "type": "url",
+      "id": "url",
+      "label": "Button link"
+    },
+    {
+      "type": "header",
+      "content": "Text"
+    },
+    {
+      "type": "range",
+      "id": "size",
+      "label": "Font size on desktop",
+      "min": 10,
+      "max": 109,
+      "step": 1,
+      "unit": "px",
+      "default": 26
+    },
+    {
+      "type": "range",
+      "id": "sizeMob",
+      "label": "Font size on mobile",
+      "min": 10,
+      "max": 70,
+      "step": 1,
+      "unit": "px",
+      "default": 17
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Alignment",
+      "default": "center",
+      "options": [
+        {
+          "value": "start",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "end",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Appearance"
+    },
+    {
+      "type": "color",
+      "id": "background",
+      "label": "Background color",
+      "default": "rgba(0,0,0,0)"
+    },
+    {
+      "type": "color",
+      "id": "color",
+      "label": "Text color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "buttonBg",
+      "label": "Button background color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "buttonColor",
+      "label": "Button text color",
+      "default": "#FFFFFF"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,62 @@
+{%- comment -%}
+	- Used: globally as "add to cart" button.
+	- Include: {%- render 'global-product-form' for product as product -%}
+{%- endcomment -%}
+{%- if product.available -%}
+
+{%- if settings.cart_type != 'page' -%}<ajax-cart-product-form>{%- endif -%}
+{%- form 'product', product, id: product_form_id, class: 'form', novalidate: 'novalidate', data-type: dataType, data-cart-submit: cartSubmit -%}
+
+<div data-ajax-cart-errors="form"></div>
+
+<x-grid class="actions" columns="2">
+	{%- comment -%} Variant select {%- endcomment -%}
+	<x-cell class="select{% if product.variants.size == 1 %} hidden{%endif%}">
+        <label for="prodSelect-{{ product.id }}" class="visually-hidden">Select {{ product.title }}</label>
+		<select name="id" id="prodSelect-{{ product.id }}" class="productSelect" onchange="selectOptions(this,{{ product.id }})">
+		{%- for variant in product.variants -%}
+		{%- if variant.available -%}
+			<option value="{{ variant.id }}" 
+				data-option="{{ variant.title }}"
+				data-price="{{ variant.price | money }}"
+				{% if variant == product.selected_or_first_available_variant %} selected{% endif %}>{{ variant.title }}{% if settings.cardQuickBuySelectPrice %} - {{ variant.price | money_with_currency }}{% endif %}
+			</option>
+		{%- else -%}
+			<option disabled>{{ variant.title }} - {{ 'product.soldOut' | t }}</option>
+		{%- endif -%}
+		{%- endfor -%}
+		</select>
+	</x-cell>
+
+	{%- comment -%} Form button {%- endcomment -%}
+	<x-cell {% if product.variants.size == 1 %}span="row"{%endif%}>
+		<button type="submit" name="add" class="cartButton is-primary">
+			<span class="cartPriceAdd">
+			<x-flex jc="around" style="gap:1rem">
+				{%- if settings.cardQuickBuyButtonPrice -%}
+				<x-cell>
+					<span class="uprice{{ product.id }}">{{ product.selected_or_first_available_variant.price | money }}</span>
+				</x-cell>
+				{%- endif -%}
+				<x-cell class="clipper">
+                    {%- liquid
+                        unless product.tags contains 'preorder'
+                            echo 'product.addToCart' | t
+                        else
+                            echo 'product.preorder' | t
+                        endunless
+                    -%}
+                </x-cell>
+			</x-flex>
+			</span>
+			<span class="cartLoader">{{ 'product.addingToCart' | t }}</span>
+		</button>
+	</x-cell>
+</x-grid>
+{%- endform -%}
+{%- if settings.cart_type != 'page' -%}</ajax-cart-product-form>{%- endif -%}
+{%- else -%}
+<button class="is-primary soldoutButton" disabled>
+	<span class="cartPriceAdd">{{ 'product.soldOut' | t }}</span>
+</button>
+{%- endif -%}

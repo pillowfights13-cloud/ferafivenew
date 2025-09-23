@@ -1,0 +1,115 @@
+<section class="related products no-js-hidden">
+<product-recommendations class="product product-recommendations page-width" 
+    data-url="{{ routes.product_recommendations_url }}?limit={{ section.settings.numberOfProds }}"
+    data-section-id="{{ section.id }}"
+    data-product-id="{{ product.id }}"
+>
+{% if recommendations.performed and recommendations.products_count > 0 %}
+{%- liquid
+    assign scrollerState = section.settings.horizontalScroller
+    assign totalProducts = recommendations.products_count
+
+    case scrollerState
+    when "desk"
+
+        assign horizontalScroll = nil
+        assign hscrollSlide = nil
+        if totalProducts > 3
+            assign horizontalScroll = 'card scroll-snap'
+            assign hscrollSlide = true
+        endif
+
+    when "mob"
+        assign horizontalScroll = 'card scroll-snap-m'
+        assign hscrollSlide = true
+
+    when "both"
+
+        assign horizontalScroll = 'card scroll-snap-m'
+        if totalProducts > 3
+            assign horizontalScroll = 'card scroll-snap scroll-snap-m'
+            assign hscrollSlide = true
+        endif
+
+    else 
+        assign horizontalScroll = nil
+        assign hscrollSlide = nil
+    endcase
+-%}
+{%- comment -%} hscroll-slider {%- endcomment -%}
+{%- if hscrollSlide != nil -%}<component-loader><hscroll-slider>{%- endif -%}
+<div class="gs-title" x-flex ai="center" jc="between">
+    <x-cell><h3>{{ 'product.youd_also_like' | t }}</h3></x-cell>
+    {%- if hscrollSlide != nil -%}<x-flex ai="center" jc="between" style="gap:var(--margin)">
+        <button class="is-blank" style="padding:0" hscroll-button-prev aria-label="{{ 'pagination.previous' | t }}">
+            {%- render 'global-icon' with 'arrow-left' -%}
+        </button>
+        <button class="is-blank" style="padding:0" hscroll-button-next aria-label="{{ 'pagination.next' | t }}">
+            {%- render 'global-icon' with 'arrow-right' -%}
+        </button>
+    </x-flex>{%- endif -%}
+</div>
+
+<x-grid 
+    {% if hscrollSlide != nil %}hscroll-area{% endif %}
+	class="cards {{ horizontalScroll }}"
+	columns="{{ settings.cardGridCol }}"
+	columns-m="{{ settings.cardGridCol-m }}"
+	columns-s="{{ settings.cardGridCol-s }}"
+	card-type="{{ settings.cardTypeOf }}"
+	card-ratio="{{ settings.cardRatio }}"
+	card-quickbuy="{{ settings.cardQuickBuy }}"
+	card-quickbuy-hover="{{ settings.cardHoverQuickBuy }}"
+	card-quickbuy-float="{{ settings.cardFloatQuickBuy }}"
+	card-img-crop="{{ settings.cardImgCrop }}"
+	card-img-radius="{{ settings.cardImgRadius }}"
+	card-img-padding="{{ settings.cardImgPadding }}"
+>
+{%- liquid 
+    for product in recommendations.products
+        render 'global-product-card' for product as product, hscrollElement: 'hscroll-slide'
+    endfor 
+-%}
+</x-grid>
+{%- comment -%} hscroll-slider buttons {%- endcomment -%}
+{%- if hscrollSlide != nil -%}
+</hscroll-slider></component-loader>
+{%- comment -%} / hscroll-slider {%- endcomment -%}
+{%- endif -%}
+
+{%- endif -%}
+</product-recommendations>
+</section>
+
+{% schema %}
+{
+    "name": "Product recommendations",
+    "settings": [
+        {
+            "type": "paragraph",
+            "content": "Control product recommendation with \"Shopify Search & Discovery app\", [learn more](https://help.shopify.com/en/manual/online-store/search-and-discovery/product-recommendations)."
+        },
+        {
+            "type": "range",
+            "label": "Products shown",
+            "id": "numberOfProds",
+            "min": 3,
+            "max": 9,
+            "step": 1,
+            "default": 3
+        },
+        {
+            "type": "select",
+            "id": "horizontalScroller",
+            "label": "Enable horizontal scroll",
+            "default": "mob",
+            "options": [
+                { "value": "none", "label": "None" },
+                { "value": "desk", "label": "Desktop" },
+                { "value": "mob", "label": "Mobile" },
+                { "value": "both", "label": "Desktop and mobile" }
+            ]
+        }
+    ]
+}
+{% endschema %}

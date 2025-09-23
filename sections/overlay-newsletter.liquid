@@ -1,0 +1,332 @@
+{%- assign img = section.settings.image -%}
+
+<newsletter-popup
+    class="newsletter"
+    data-section-id="{{ section.id }}"
+    data-expire="{{ section.settings.expire }}"
+    data-delay="{{ section.settings.delay }}"
+    data-design-mode="{{ request.design_mode }}"
+    style="--newsletterBg:{{ section.settings.newsletterpopupBg }};--newsletterColor:{{ section.settings.newsletterpopupColor }};--disclaimerColor:{{ section.settings.newsletterpopupColor | color_modify: 'alpha', 0.4 }};--dialogWidth:{{ section.settings.dialogWidth }}"
+    image-position="{{ section.settings.imagePosition }}"
+>
+    {%- comment -%}<button open-newsletter>Open newsletter</button>{%- endcomment -%}
+
+    <dialog position="{{ section.settings.dialogPosition}}" position-m="{{ section.settings.dialogPositionMob }}" class="{{ section.settings.dialogTextAlign }} newsletterModal">
+        <style>newsletter-popup ::backdrop { background:{{ settings.bgColor | color_modify: 'alpha', 0.85 }}; {%- unless section.settings.backdrop -%}opacity:0{%- endunless -%} }</style>
+        <x-flex jc="between" ai="center" class="header">
+            <x-cell><h2 class="visually-hidden">{{ section.settings.heading }}</h2></x-cell>
+            <x-cell><form>
+                <button formmethod="dialog" value="cancel" class="is-blank" aria-label="{{ 'header.close' | t }}">
+                    <span class="visually-hidden">{{ 'header.close' | t }}</span>
+                    {%- render 'global-icon' with 'x' -%}
+                </button>
+            </form></x-cell>
+        </x-flex>
+
+        <x-grid columns="fit" class="contents" class="newsletterBody">
+            {%- if img != nil -%}
+            <picture {% if section.settings.showImageMob != true %}class="large-only"{% endif %}>{{ img | image_url: width: 900 | image_tag: alt: img.alt }}</picture>
+            {%- endif -%}
+
+            <x-flex direction="column" jc="center" class="modal" style="gap:var(--padding)">
+                <x-cell order="1" class="heading">
+                    <h3 class="h1">{{ section.settings.heading }}</h3>
+                    {%- if section.settings.subheading != blank -%}<h4 class="h2">{{ section.settings.subheading }}</h4>{%- endif -%}
+                </x-cell>
+                <x-cell order="2" class="description">{{ section.settings.description }}</x-cell>
+                <x-cell order="3" class="form">{%- render 'global-newsletter', location: 'popup', class: 'popup-newsletter' -%}</x-cell>
+                {%- if section.settings.disclaimer != blank -%}
+                <x-cell order="4" class="disclaimer"><small>{{ section.settings.disclaimer }}</small></x-cell>
+                {%- endif -%}
+            </x-flex>
+        </x-grid>
+    </dialog>
+</newsletter-popup>
+
+<style>
+newsletter-popup { display: block }
+
+newsletter-popup dialog {
+    --colorHeadings: var(--newsletterColor);
+    --color: var(--newsletterColor);
+    --buttonBgColor: var(--newsletterColor);
+    --buttonColor: var(--newsletterBg);
+    --boxBgColor: var(--newsletterColor);
+    --boxColor: var(--newsletterBg);
+    --boxPlaceholderColor: var(--newsletterBg);
+    color: var(--newsletterColor);
+    background: var(--newsletterBg);
+    border: var(--globalBorder);
+    border-radius: calc(var(--radius) / 3);
+    padding: 0;
+    max-width: var(--dialogWidth)
+}
+
+newsletter-popup .header { position: absolute; top: var(--margin); right: var(--margin); z-index: 2; }
+newsletter-popup .header button.is-blank {
+    --buttonBgColor: var(--newsletterColor);
+    --buttonColor: var(--newsletterBg);
+    border-radius: 100vw;
+    aspect-ratio: 1 / 1;
+    height: 5rem;
+    display: grid;
+    place-items: center;
+}
+
+newsletter-popup .header button.is-blank svg.icon { transform: none; pointer-events: none }
+
+newsletter-popup .contents { gap: var(--globalBorderWidth) }
+newsletter-popup .contents > *:not(picture) { margin: var(--padding) }
+newsletter-popup .contents picture { outline: var(--globalBorder); max-height: 700px }
+newsletter-popup .contents .disclaimer { opacity: .5 }
+newsletter-popup.hasformstatus .description { display: none!important }
+
+newsletter-popup:where([image-position="top"],[image-position-m="top"]) .contents picture img { object-fit: cover }
+
+@media (min-width: 778px) {
+    newsletter-popup dialog[position="top center"] { margin-top: var(--margin) }
+    newsletter-popup dialog[position="top left"] { margin-top: var(--margin); margin-left: var(--margin) }
+    newsletter-popup dialog[position="top right"] { margin-top: var(--margin); margin-right: var(--margin) }
+    newsletter-popup dialog[position="bottom center"] { margin-bottom: var(--margin) }
+    newsletter-popup dialog[position="bottom left"] { margin-bottom: var(--margin); margin-left: var(--margin) }
+    newsletter-popup dialog[position="bottom right"] { margin-bottom: var(--margin); margin-right: var(--margin) }
+
+    newsletter-popup[image-position="right"] .contents picture { order: 2 }
+    newsletter-popup[image-position="right"] .contents .modal { order: 1 }
+    newsletter-popup[image-position="top"] .contents { --grid-tc: 1 }
+    newsletter-popup[image-position="top"] .contents picture img { height: 40ch }
+}
+
+@media (max-width: 777px) {
+    newsletter-popup dialog { margin-inline: var(--margin) }
+
+    newsletter-popup dialog[position-m="top"] { margin-top: var(--margin) }
+    newsletter-popup dialog[position-m="bottom"] { margin-bottom: var(--margin) }
+
+    newsletter-popup .contents { --grid-tc: 1 }
+    newsletter-popup .contents picture { order: 1 }
+    newsletter-popup .contents picture img { height: 30ch }
+    newsletter-popup .contents .modal { order: 2 }
+}
+</style>
+
+<script>
+class newsletterPopup extends HTMLElement {
+    constructor() {
+        super();
+
+        this.modal = this.querySelector('dialog');
+        this.cookieName = 'ferafive:newsletter';
+
+        if (window.location.pathname === '/challenge') return; // On challenge page, close modal
+        if (this.querySelector('[data-form-status]')) { this.open(); this.classList.add('hasformstatus') } // On failure or success, open modal
+        if (!this.getCookie(this.cookieName) || this.dataset.designMode === 'true') this.init();
+
+        // Register event listeners
+        {% if request.design_mode %}
+        if (Shopify.designMode) {
+          document.addEventListener('shopify:section:load',(event) => filterShopifyEvent(event, this, this.open.bind(this)));
+          document.addEventListener('shopify:section:select',(event) => filterShopifyEvent(event, this, this.open.bind(this)));
+          document.addEventListener('shopify:section:deselect',(event) => filterShopifyEvent(event, this, this.close.bind(this)));
+        }
+        {%- endif -%}
+
+        document.querySelectorAll('[open-newsletter]').forEach((button) => button.addEventListener('click', this.open.bind(this)));
+        document.querySelectorAll('[value="cancel"], [close-newsletter]').forEach((button) => button.addEventListener('click', this.close.bind(this)));
+    }
+
+    init() {
+        if (Shopify && Shopify.designMode) return;
+        if (this.getCookie(this.cookieName)) return;
+
+        setTimeout(() => {
+            if (!this.modal.hasAttribute('open')) this.open();
+        }, parseInt(this.dataset.delay) * 1000);
+    }
+    
+
+    open() {
+        if (!this.modal.hasAttribute('open')) {
+            this.modal.showModal();
+            this.removeCookie(this.cookieName);
+        }
+    }
+
+    close() {
+        this.modal.close();
+        if (this.dataset.designMode === 'true') {
+            this.removeCookie(this.cookieName);
+            return;
+        } else { history.replaceState({}, document.title, window.location.pathname) }
+
+        this.setCookie(this.cookieName, this.dataset.expire);
+    }
+
+    getCookie(name) { const match = document.cookie.match(`(^|;)\\s*${name}\\s*=\\s*([^;]+)`); return match ? match[2] : null;}
+    setCookie(name, expire) { document.cookie = `${name}=true; max-age=${expire * 24 * 60 * 60}; path=/`; }
+    removeCookie(name) { document.cookie = `${name}=; max-age=0`; }
+}
+
+customElements.define('newsletter-popup', newsletterPopup);
+</script>
+
+{% schema %}
+{
+    "name": "Newsletter",
+    "limit": 1,
+    "enabled_on": { "groups": ["aside"] },
+    "settings": [
+      {
+        "type": "header",
+        "content": "Newsletter",
+        "info": "Subscribers will be added to your “accepts marketing” [customer list](/admin/customers?query=&accepts_marketing=1)."
+      },
+      {
+        "type": "range",
+        "id": "delay",
+        "label": "Delay",
+        "min": 1,
+        "max": 60,
+        "unit": "sec",
+        "step": 1,
+        "default": 30
+      },
+      {
+        "type": "range",
+        "id": "expire",
+        "label": "Frequency",
+        "info": "Number of days before a closed popup reappears.",
+        "min": 1,
+        "max": 60,
+        "unit": "day",
+        "step": 1,
+        "default": 7
+      },
+      {
+        "type": "select",
+        "id": "dialogWidth",
+        "label": "Dialog width",
+        "default": "90ch",
+        "options": [
+            { "value": "90ch", "label": "Normal" },
+            { "value": "65ch", "label": "Compact" }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "dialogPosition",
+        "label": "Dialog position - desktop",
+        "default": "center",
+        "options": [
+            { "value": "center", "label": "Center" },
+            { "value": "top left", "label": "Top left" },
+            { "value": "top center", "label": "Top center" },
+            { "value": "top right", "label": "Top right" },
+            { "value": "bottom left", "label": "Bottom left" },
+            { "value": "bottom center", "label": "Bottom center" },
+            { "value": "bottom right", "label": "Bottom right" }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "dialogPositionMob",
+        "label": "Dialog position - mobile",
+        "default": "bottom",
+        "options": [
+            { "value": "top", "label": "Top" },
+            { "value": "center", "label": "Center" },
+            { "value": "bottom", "label": "Bottom" }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Image"
+      },
+      {
+        "type": "image_picker",
+        "id": "image",
+        "label": "Image"
+      },
+      {
+        "type": "checkbox",
+        "id": "showImageMob",
+        "label": "Show on mobile",
+        "default": false
+      },
+      {
+        "type": "select",
+        "id": "imagePosition",
+        "label": "Desktop position",
+        "default": "top",
+        "info": "Mobile defaults to top.",
+        "options": [
+            { "value": "top", "label": "Top" },
+            { "value": "left", "label": "Left" },
+            { "value": "right", "label": "Right" }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Content"
+      },
+      {
+        "type": "text",
+        "id": "heading",
+        "label": "Heading",
+        "default": "Newsletter"
+      },
+      {
+        "type": "text",
+        "id": "subheading",
+        "label": "Subheading"
+      },
+      {
+        "type": "textarea",
+        "id": "description",
+        "label": "Description",
+        "default": "Stay up to date on the latest product releases, special offers and news by signing up for our newsletter."
+      },
+      {
+        "type": "richtext",
+        "id": "disclaimer",
+        "label": "Disclaimer"
+      },
+      {
+        "type": "select",
+        "id": "dialogTextAlign",
+        "label": "Text align",
+        "default": "text-start",
+        "options": [
+            { "value": "text-start", "label": "Left" },
+            { "value": "text-center", "label": "Center" },
+            { "value": "text-end", "label": "Right" }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Appearance"
+      },
+      {
+        "type": "checkbox",
+        "id": "backdrop",
+        "label": "Show backdrop",
+        "default": false
+      },
+      {
+        "type": "color",
+        "id": "newsletterpopupBg",
+        "label": "Background color",
+        "default": "#FFFFFF"
+      },
+      {
+        "type": "color",
+        "id": "newsletterpopupColor",
+        "label": "Text color",
+        "default": "#000000"
+      }
+    ],
+    "presets": [
+        { "name": "Newsletter" }
+    ]
+}
+{% endschema %}

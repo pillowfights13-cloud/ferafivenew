@@ -1,0 +1,119 @@
+{%- if section.settings.marqueeText != blank -%}
+<section class="marquee" style="--marqueeBg:{{ section.settings.marqueeBg }};--marqueeColor:{{ section.settings.marqueeColor }}; --marqueeFontSize:{{ section.settings.size }}px;--marqueeFontSizeMob:{{ section.settings.sizeMob }}px">
+    <ferafive-marquee go
+        ferafive-reverse="{{ section.settings.marqueeDirection }}" 
+        ferafive-speed="{{ section.settings.marqueeSpeeds }}" 
+        ferafive-pause="{{ section.settings.marqueePause }}"
+    >
+        {%- for i in (1..15) -%}
+        <span class="projectile" {% unless forloop.first %}aria-hidden="true"{% endunless %}>
+            <span>
+            {%- if section.settings.marqueeLink != blank -%}<a href="{{ section.settings.marqueeLink }}" class="no-style" {% unless forloop.first %}aria-hidden="true" tabindex="-1"{% endunless %}>{%- endif -%}
+                <x-flex ai="center" jc="center" style="gap:var(--marqueeLateralSpace)">
+                    <x-cell>{{ section.settings.marqueeText }}</x-cell> 
+                    {%- if section.settings.image -%}<x-cell>{{ section.settings.image | image_url: height: 65 | image_tag: srcset: nil, loading: 'lazy' }}</x-cell>{%- endif -%}
+                </x-flex>
+            {%- if section.settings.marqueeLink != blank -%}</a>{%- endif -%}
+            </span>
+        </span>
+        {%- endfor -%}
+    </ferafive-marquee>
+</section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Scrolling text",
+  "disabled_on": { "groups": ["header", "footer", "aside"] },
+  "class": "marquee-walker",
+  "presets": [
+    {
+      "name": "Scrolling text"
+    }
+  ],
+  "settings": [
+    {
+      "type": "text",
+      "id": "marqueeText",
+      "label": "Text",
+      "default": "Announce something here"
+    },
+    {
+        "type": "image_picker",
+        "id": "image",
+        "label": "Image icon",
+        "info": "60 x 60 px recommended"
+    },
+    {
+      "type": "url",
+      "id": "marqueeLink",
+      "label": "Link"
+    },
+    {
+        "type": "select",
+        "id": "marqueeDirection",
+        "label": "Scroll direction",
+        "default": "false",
+        "options": [
+            { "value": "false", "label": "Right to left" },
+            { "value": "true", "label": "Left to right" }
+        ]
+    },
+    {
+        "type": "range",
+        "label": "Scrolling speed",
+        "id": "marqueeSpeeds",
+        "min": 10,
+        "max": 100,
+        "step": 5,
+        "default": 40
+    },
+    {
+        "type": "checkbox",
+        "id": "marqueePause",
+        "label": "Pause scrolling on hover",
+        "default": true
+    },
+    {
+      "type": "header",
+      "content": "Text"
+    },
+    {
+      "type": "range",
+      "id": "size",
+      "label": "Font size on desktop",
+      "min": 10,
+      "max": 109,
+      "step": 1,
+      "unit": "px",
+      "default": 26
+    },
+    {
+      "type": "range",
+      "id": "sizeMob",
+      "label": "Font size on mobile",
+      "min": 10,
+      "max": 70,
+      "step": 1,
+      "unit": "px",
+      "default": 17
+    },
+    {
+      "type": "header",
+      "content": "Appearance"
+    },
+    {
+      "type": "color",
+      "id": "marqueeBg",
+      "label": "Background color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "marqueeColor",
+      "label": "Text color",
+      "default": "#000000"
+    }
+  ]
+}
+{% endschema %}

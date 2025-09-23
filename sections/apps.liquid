@@ -1,0 +1,23 @@
+<div class="appblock">
+{%- for block in section.blocks -%}
+	<div {{ block.shopify_attributes }}>{%- render block -%}</div>
+{%- endfor -%}
+</div>
+
+{% schema %}
+{
+  "name": "Apps",
+  "tag": "section",
+  "class": "itsapp",
+  "blocks": [
+    {
+      "type": "@app"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Apps"
+    }
+  ]
+}
+{% endschema %}

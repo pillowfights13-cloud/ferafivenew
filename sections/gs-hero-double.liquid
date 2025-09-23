@@ -1,0 +1,374 @@
+<section class="hero-double blox-{{ section.blocks.size }}">
+    <x-grid 
+        columns="{{ section.settings.perRow }}" 
+        columns-s="{{ section.settings.perRowMob }}"
+        uniform-media="{{ section.settings.uniformMedia }}"
+    >
+        {%- for block in section.blocks -%}
+        {%- liquid
+            assign hasUrl = false
+            case block.type
+                when 'image'
+                    assign mediaType = 'image'
+                    assign url = block.settings.url
+                    if url
+                        assign hasUrl = true
+                    endif
+                when 'video'
+                    assign mediaType = 'video'
+                    assign url = block.settings.url
+                    if url
+                        assign hasUrl = true
+                    endif
+            endcase
+        -%}
+        <x-cell 
+            media-type="{{ mediaType }}" 
+            has-url="{{ hasUrl }}"
+            {{ block.shopify_attributes }}
+        >
+            {% if url %}<a href="{{ url }}" class="no-style">{% endif %}
+
+            {%- if block.settings.title -%}
+            <x-flex class="contents" pi="{{ block.settings.contentPosition }}">
+                <x-cell>
+                    <h3 class="title{% if block.settings.heroHasBg == true %} hasBg{% endif %}" style="--heroMetaH1Bg:{{ block.settings.heroBg }};color:{{ block.settings.heroColor }}">{{ block.settings.title }}</h3>
+                </x-cell>
+            </x-flex>
+			{%- endif -%}
+
+            {%- case block.type -%}
+            {%- when 'image' -%}
+
+                <picture>
+                    {%- assign imgMobile = block.settings.imageMobile -%}
+                    {%- assign imgDesktop = block.settings.image -%}
+
+                    {%- if imgDesktop != nil or imgMobile != nil -%}
+                    {%- if imgMobile != nil -%}<source srcset="{{ imgMobile | image_url: width: 970 }} 1x, {{ imgMobile | image_url: width: 1280 }} 2x" media="(max-width:777px)">{%- endif -%}
+                    {%- liquid
+                        assign width = 2750
+                        assign widths = '450,550,750,1000,1280,1500,1750,2000,2500,2750'
+                        assign alt = block.settings.title
+                        render 'global-img' img: imgDesktop, alt: alt, width: width, widths: widths
+                    -%}
+                    {%- else -%}
+                    {{ 'collection-2' | placeholder_svg_tag: 'svg-placeholder' }}
+                    {%- endif -%}
+                </picture>
+
+            {%- when 'video' -%}
+
+                {%- liquid
+                    assign vid = block.settings.video
+                    assign vidMobile = block.settings.videoMobile | default: nil 
+
+                    assign loop = block.settings.videoLoop
+                    assign autoplay = block.settings.videoAutoplay
+                    assign muted = block.settings.videoMute
+                    assign clickToPlay = block.settings.clickToPlay
+                    assign controls = block.settings.playPause
+
+                    render 'global-video' vid: vid, vidMobile: vidMobile, loop: loop, autoplay: autoplay, muted: muted, clickToPlay: clickToPlay, controls: controls
+                -%}
+
+            {%- endcase -%}
+
+		 	{%- if url -%}</a>{%- endif -%}
+	 	</x-cell>
+		{%- endfor -%}
+	</x-grid>
+</section>
+
+{% schema %}
+{
+  "name": "Hero multicolumn",
+  "disabled_on": {
+    "groups": [
+      "header",
+      "footer",
+      "aside"
+    ]
+  },
+  "max_blocks": 6,
+  "presets": [
+    {
+      "name": "Hero multicolumn",
+      "blocks": [
+        {
+          "type": "image"
+        },
+        {
+          "type": "video"
+        }
+      ]
+    }
+  ],
+  "settings": [
+    {
+      "type": "select",
+      "id": "perRow",
+      "label": "Banners per row - desktop",
+      "default": "2",
+      "options": [
+        {
+          "value": "2",
+          "label": "Two"
+        },
+        {
+          "value": "3",
+          "label": "Three"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "perRowMob",
+      "label": "Banners per row - mobile",
+      "default": "1",
+      "options": [
+        {
+          "value": "1",
+          "label": "One"
+        },
+        {
+          "value": "2",
+          "label": "Two"
+        }
+      ]
+    },
+    {
+        "type": "checkbox",
+        "id": "uniformMedia",
+        "label": "Enable uniform media",
+        "info": "Keep all media elements the same size for a consistent appearance.",
+        "default": true
+    }
+  ],
+  "blocks": [
+    {
+      "name": "Image",
+      "type": "image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Desktop",
+          "info": "9:16 recommended"
+        },
+        {
+            "type": "image_picker",
+            "id": "imageMobile",
+            "label": "Mobile",
+            "info": "9:16 recommended"
+          },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Heading",
+          "default": "Your hero image heading"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "Heading link"
+        },
+        {
+          "type": "select",
+          "id": "contentPosition",
+          "label": "Content position",
+          "default": "top left",
+          "options": [
+            {
+              "value": "top left",
+              "label": "Top left"
+            },
+            {
+              "value": "top center",
+              "label": "Top center"
+            },
+            {
+              "value": "top right",
+              "label": "Top right"
+            },
+            {
+              "value": "center left",
+              "label": "Middle left"
+            },
+            {
+              "value": "center",
+              "label": "Middle center"
+            },
+            {
+              "value": "center right",
+              "label": "Middle right"
+            },
+            {
+              "value": "bottom left",
+              "label": "Bottom left"
+            },
+            {
+              "value": "bottom center",
+              "label": "Bottom center"
+            },
+            {
+              "value": "bottom right",
+              "label": "Bottom right"
+            }
+          ]
+        },
+        {
+          "type": "header",
+          "content": "Appearance"
+        },
+        {
+          "type": "color",
+          "id": "heroColor",
+          "label": "Heading text color",
+          "default": "#000000"
+        },
+        {
+          "type": "color",
+          "id": "heroBg",
+          "label": "Heading background color",
+          "default": "#FFFFFF"
+        },
+        {
+          "type": "checkbox",
+          "id": "heroHasBg",
+          "label": "Enable heading background",
+          "default": false
+        }
+      ]
+    },
+    {
+      "name": "Video",
+      "type": "video",
+      "settings": [
+        {
+            "type": "video",
+            "id": "video",
+            "label": "Desktop",
+            "info": "9:16 recommended."
+        },
+        {
+            "type": "video",
+            "id": "videoMobile",
+            "label": "Mobile",
+            "info": "9:16 recommended."
+        },
+        {
+          "type": "checkbox",
+          "id": "videoLoop",
+          "label": "Loop",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "id": "videoMute",
+          "label": "Mute",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "videoAutoplay",
+          "label": "Autoplay",
+          "default": false,
+          "info": "Autoplay is not recommended. It is not supported on mobile devices and disabled by default in many browsers."
+        },
+        {
+            "type": "checkbox",
+            "id": "clickToPlay",
+            "label": "Enable click to play",
+            "info": "A click on the video will toggle play/pause. If a Heading link is defined, this will not function.",
+            "default": true
+        },
+        {
+            "type": "checkbox",
+            "id": "playPause",
+            "label": "Enable play/pause button",
+            "default": false,
+            "info": "If a Heading link is defined, this will not function."
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Heading",
+          "default": "Your hero video heading"
+        },
+        {
+            "type": "url",
+            "id": "url",
+            "label": "Heading link"
+        },
+        {
+          "type": "select",
+          "id": "contentPosition",
+          "label": "Content position",
+          "default": "top left",
+          "options": [
+            {
+              "value": "top left",
+              "label": "Top left"
+            },
+            {
+              "value": "top center",
+              "label": "Top center"
+            },
+            {
+              "value": "top right",
+              "label": "Top right"
+            },
+            {
+              "value": "center left",
+              "label": "Middle left"
+            },
+            {
+              "value": "center",
+              "label": "Middle center"
+            },
+            {
+              "value": "center right",
+              "label": "Middle right"
+            },
+            {
+              "value": "bottom left",
+              "label": "Bottom left"
+            },
+            {
+              "value": "bottom center",
+              "label": "Bottom center"
+            },
+            {
+              "value": "bottom right",
+              "label": "Bottom right"
+            }
+          ]
+        },
+        {
+          "type": "header",
+          "content": "Appearance"
+        },
+        {
+          "type": "color",
+          "id": "heroColor",
+          "label": "Heading text color",
+          "default": "#000000"
+        },
+        {
+          "type": "color",
+          "id": "heroBg",
+          "label": "Heading background color",
+          "default": "#FFFFFF"
+        },
+        {
+          "type": "checkbox",
+          "id": "heroHasBg",
+          "label": "Enable heading background",
+          "default": false
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

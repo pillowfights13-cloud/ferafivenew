@@ -1,0 +1,29 @@
+{%- comment -%}
+	- Used: globally as "price" in "global-product-card"
+	- Include: {%- render 'global-product-price' for product as product -%}
+{%- endcomment -%}
+<div>
+{%- if product.price_varies -%}
+	<div><span class="price">{{ 'product.from' | t }} {{ product.price_min | money }}</span></div>
+{%- else -%}
+	<div>
+	{%- if product.variants.first.compare_at_price > product.variants.first.price -%}
+	<span class="old-price"><s>{{ product.variants.first.compare_at_price | money }}</s></span>
+	{%- endif -%}
+	<span class="new-price">{{ product.variants.first.price | money }}</span>
+	</div>
+{%- endif -%}
+{%- comment -%} Unit price {%- endcomment -%}
+{%- if product.selected_or_first_available_variant.unit_price_measurement != nil -%}
+	<small class="unit-price smaller">
+		<span>{{- product.selected_or_first_available_variant.unit_price | money -}}</span>
+		<span aria-hidden="true">/</span>
+		<span>
+		{%- if product.selected_or_first_available_variant.unit_price_measurement.reference_value != 1 -%}
+			{{- product.selected_or_first_available_variant.unit_price_measurement.reference_value -}}
+		{%- endif -%}
+			{{ product.selected_or_first_available_variant.unit_price_measurement.reference_unit }}
+		</span>
+	</small>
+{%- endif -%}
+</div>

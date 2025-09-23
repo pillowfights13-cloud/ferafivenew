@@ -1,0 +1,59 @@
+// Cart
+import '{{ "m-cart.js" | asset_url }}';
+
+// (Cart) Add attribute while product being added to cart
+document.addEventListener("liquid-ajax-cart:request-start", (event) => {
+	const { requestState } = event.detail;
+	if (requestState.requestType === "add") document.body.setAttribute("cart-state", "processing");
+});
+
+document.addEventListener("liquid-ajax-cart:request-end", (event) => {
+	const { requestState } = event.detail;
+
+	// # If the "add to cart" request is successful
+	if (requestState.requestType === "add" && requestState.responseData?.ok) {
+		// Open the cart dialog
+		const cartBox = document.getElementById("cartBox");
+		if (cartBox) cartBox.open();
+	}
+
+	// # Update header cart counter
+	let itemCount = window.liquidAjaxCart.cart.item_count; // Get the item count
+	document.querySelectorAll("[data-count]").forEach(function (el) {
+		el.setAttribute("data-count", itemCount); // Update the data-count attribute
+	});
+
+	// # Add attribute when product is added to cart
+	if (requestState.requestType === "add") {
+		document.body.removeAttribute("cart-state", "processing");
+		document.body.setAttribute("cart-state", "done");
+		setTimeout(function () {
+			document.body.removeAttribute("cart-state", "done");
+		}, 4000);
+	}
+
+	// # Keep elements open when updating cart
+	document.querySelectorAll("[data-ajax-cart-section] [data-ajax-cart-details]").forEach(($details) => {
+		const key = $details.getAttribute("data-ajax-cart-details");
+		if (!key) return;
+		$details.open = cartDetailsOpen[key];
+	});
+	cartDetailsInit();
+});
+
+// (Cart) Fix for details to stay open
+const cartDetailsOpen = {};
+function cartDetailsInit() {
+	document.querySelectorAll("[data-ajax-cart-section] [data-ajax-cart-details]").forEach(($details) => {
+		const key = $details.getAttribute("data-ajax-cart-details");
+		if (!key) return;
+		cartDetailsOpen[key] = $details.hasAttribute("open");
+		$details.addEventListener("toggle", (event) => {
+			cartDetailsOpen[key] = event.target.open;
+		});
+	});
+}
+cartDetailsInit();
+
+// Remove in production
+//window.liquidAjaxCart.conf('updateOnWindowFocus', false);

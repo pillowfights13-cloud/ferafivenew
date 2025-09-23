@@ -1,0 +1,398 @@
+<footer>
+    <x-flex direction-s="column" wrap="wrap">
+        {%- for block in section.blocks -%}
+            {%- case block.type -%}
+                {%- when 'motto' -%}
+                    <x-cell id="f-motto" class="hasb" data-fullwidth="{{ block.settings.fullwidth }}" {{ block.shopify_attributes }}>
+                        <div class="mpti rte">{{ block.settings.motto }}</div>
+                    </x-cell>
+                {%- when 'newsletter' -%}
+                    <x-cell id="f-newsletter" class="hasb" data-fullwidth="{{ block.settings.fullwidth }}" {{ block.shopify_attributes }}>
+                        <x-flex direction="column">
+                            <x-cell>
+                                <p>{{ block.settings.footerNewsletterTitle }}</p>
+                            </x-cell>
+                            <x-cell>{%- render 'global-newsletter', class: 'footer-newsletter', location: 'footer' -%}</x-cell>
+                        </x-flex>
+                    </x-cell>
+                {%- when 'menu' -%}
+                    <x-cell
+                        id="f-links"
+                        class="hasb"
+                        data-fullwidth="{{ block.settings.fullwidth }}"
+                        data-multicolumn="{{ block.settings.multicolumn }}"
+                        {{ block.shopify_attributes }}
+                    >
+                        <x-flex class="f-links" jc="{{ block.settings.alignment }}" jc-s="{{ block.settings.alignmentMobile }}">
+                            <x-cell>
+                                {%- liquid
+                                    assign linklist = block.settings.menu
+
+                                    if block.settings.fullwidth != true and block.settings.multicolumn == true
+                                        assign total_links = linklists[linklist].links.size
+                                        if total_links <= 5
+                                            assign columns = 1
+                                        else
+                                            assign columns = total_links | divided_by: 3 | plus: 1
+                                        endif
+
+                                        if columns > 3
+                                            assign columns = 3
+                                        endif
+                                    endif
+                                -%}
+
+                                <ul class="no-style" x-grid columns="{{ columns }}" style="gap: calc(var(--margin) * 2) var(--padding)">
+                                    {%- for link in linklists[linklist].links -%}
+                                        <li>
+                                            <a href="{{ link.url }}" class="no-style">{{ link.title }}</a>
+                                        </li>
+                                    {%- endfor -%}
+                                </ul>
+                            </x-cell>
+                        </x-flex>
+                    </x-cell>
+
+                {%- when 'legalLinks' -%}
+                    <x-cell
+                            id="f-links"
+                            class="hasb"
+                            data-fullwidth="{{ block.settings.fullwidth }}"
+                            data-multicolumn="{{ block.settings.multicolumn }}"
+                            {{ block.shopify_attributes }}
+                        >
+                        <x-flex class="f-links" jc="{{ block.settings.alignment }}" jc-s="{{ block.settings.alignmentMobile }}">
+                            <x-cell>
+                            <ul class="no-style">
+                                {%- if block.settings.legalMenu != null -%}
+                                    {%- assign linklist = block.settings.legalMenu -%}
+                                    {%- for link in linklists[linklist].links -%}
+                                        <li><a href="{{ link.url }}" class="no-style">{{ link.title }}</a></li>
+                                    {%- endfor -%}
+                                {%- else -%}
+                                    {%- for policy in shop.policies -%}
+                                    {%- if policy != blank -%}
+                                        <li><a href="{{ policy.url }}" class="no-style">{{ policy.title }}</a></li>
+                                    {%- endif -%}
+                                    {%- endfor -%}
+                                {%- endif -%}
+                            </ul>
+                            </x-cell>
+                        </x-flex>
+                    </x-cell>
+                {%- when 'socials' -%}
+                    <x-cell id="f-socials" class="ssocialss" data-fullwidth="{{ block.settings.fullwidth }}" {{ block.shopify_attributes }}>
+                        <ul
+                            class="foosocial mob-scroll no-style{% if settings.iconsTrue == true %} iconstrue{% endif %}"
+                            jc="{{ block.settings.alignment }}"
+                            jc-s="{{ block.settings.alignmentMobile }}"
+                        >
+                            {% render 'global-social' %}
+
+                            {%- if shop.features.follow_on_shop? and block.settings.enable_follow_on_shop -%}
+                                <li class="follow-on-shop">{{ shop | login_button: action: 'follow' }}</li>
+                            {%- endif -%}
+                        </ul>
+                    </x-cell>
+                    <script>document.addEventListener('DOMContentLoaded', () => { if (document.querySelector('#f-socials li') === null) { const elx = document.getElementById('f-socials'); elx.remove() } })</script>
+            {%- endcase -%}
+        {%- endfor -%}
+    </x-flex>
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "class": "main-footer",
+  "blocks": [
+    {
+      "type": "newsletter",
+      "name": "Newsletter",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "header",
+          "content": "Footer newsletter",
+          "info": "Subscribers will be added to your “accepts marketing” [customer list.](/admin/customers?query=&accepts_marketing=1)"
+        },
+        {
+          "type": "text",
+          "id": "footerNewsletterTitle",
+          "label": "Heading",
+          "default": "Get 10% off your next purchase. Subscribe to our newsletter."
+        },
+        {
+          "type": "header",
+          "content": "Appereance"
+        },
+        {
+          "type": "checkbox",
+          "id": "fullwidth",
+          "label": "Full width row",
+          "default": false
+        }
+      ]
+    },
+    {
+      "type": "menu",
+      "name": "Footer menu",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "link_list",
+          "id": "menu",
+          "label": "Menu",
+          "default": "footer",
+          "info": "Only top-level menu items are displayed."
+        },
+        {
+          "type": "header",
+          "content": "Appereance"
+        },
+        {
+          "type": "select",
+          "id": "alignment",
+          "label": "Alignment - desktop",
+          "default": "start",
+          "options": [
+            {
+              "value": "start",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "end",
+              "label": "Right"
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "alignmentMobile",
+          "label": "Alignment - mobile",
+          "default": "start",
+          "options": [
+            {
+              "value": "start",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "end",
+              "label": "Right"
+            }
+          ]
+        },
+        {
+          "type": "checkbox",
+          "id": "multicolumn",
+          "label": "Multi-column menu",
+          "default": true,
+          "info": "Does not work when \"Full width row\" active."
+        },
+        {
+          "type": "checkbox",
+          "id": "fullwidth",
+          "label": "Full width row",
+          "default": true
+        }
+      ]
+    },
+    {
+      "type": "legalLinks",
+      "name": "Terms and policies",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Your [Store policies](https://shopify.com/admin/settings/legal/) will be used by default unless you select a specific menu below."
+        },
+        {
+          "type": "link_list",
+          "id": "legalMenu",
+          "label": "Menu",
+          "info": "Only top-level menu items are displayed."
+        },
+        {
+          "type": "header",
+          "content": "Appereance"
+        },
+        {
+          "type": "select",
+          "id": "alignment",
+          "label": "Alignment - desktop",
+          "default": "start",
+          "options": [
+            {
+              "value": "start",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "end",
+              "label": "Right"
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "alignmentMobile",
+          "label": "Alignment - mobile",
+          "default": "start",
+          "options": [
+            {
+              "value": "start",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "end",
+              "label": "Right"
+            }
+          ]
+        },
+        {
+          "type": "checkbox",
+          "id": "multicolumn",
+          "label": "Multi-column menu",
+          "default": false,
+          "info": "Does not work when \"Full width row\" active."
+        },
+        {
+          "type": "checkbox",
+          "id": "fullwidth",
+          "label": "Full width row",
+          "default": false
+        }
+      ]
+    },
+    {
+      "type": "socials",
+      "name": "Social media",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Link your social media accounts in your [Theme settings > Social media](/editor?context=theme&category=social+media) to display them."
+        },
+        {
+          "type": "header",
+          "content": "Follow on Shop"
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_follow_on_shop",
+          "label": "Enable Follow on Shop",
+          "info": "Display follow button for your storefront on the Shop app. [Learn more](https://help.shopify.com/manual/online-store/themes/customizing-themes/follow-on-shop)",
+          "default": false
+        },
+        {
+          "type": "header",
+          "content": "Appereance"
+        },
+        {
+          "type": "select",
+          "id": "alignment",
+          "label": "Alignment - desktop",
+          "default": "center",
+          "options": [
+            {
+              "value": "start",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "end",
+              "label": "Right"
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "alignmentMobile",
+          "label": "Alignment - mobile",
+          "default": "start",
+          "options": [
+            {
+              "value": "start",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "end",
+              "label": "Right"
+            }
+          ]
+        },
+        {
+          "type": "checkbox",
+          "id": "fullwidth",
+          "label": "Full width row",
+          "default": true
+        }
+      ]
+    },
+    {
+      "type": "motto",
+      "name": "About your business",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "motto",
+          "label": "Description",
+          "default": "<p>Use this to add additional information about your business, e.g. address, opening hours etc.</p>",
+          "info": "Talk about your business"
+        },
+        {
+          "type": "header",
+          "content": "Appereance"
+        },
+        {
+          "type": "checkbox",
+          "id": "fullwidth",
+          "label": "Full width row",
+          "default": false
+        }
+      ]
+    }
+  ],
+  "default": {
+    "blocks": [
+      {
+        "type": "motto"
+      },
+      {
+        "type": "newsletter"
+      },
+      {
+        "type": "menu"
+      },
+      {
+        "type": "socials"
+      },
+      {
+        "type": "legalLinks"
+      }
+    ]
+  }
+}
+{% endschema %}

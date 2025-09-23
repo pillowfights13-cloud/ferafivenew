@@ -1,0 +1,86 @@
+<section class="hero-logo" style="padding-block: {{ section.settings.paddingStart | append: 'rem' }} {{ section.settings.paddingEnd | append: 'rem' }}">
+    <x-flex jc="{{ section.settings.alignment | replace: 'left', 'start' | replace: 'right', 'end' }}">
+        <x-cell style="{{ section.settings.size | prepend: 'max-width:' | append: '%' }}">
+        {%- if section.settings.url != nil -%}<a href="{{ section.settings.url }}">{%- endif -%}
+        {%- liquid
+            assign img = section.settings.logo
+            if img != blank
+                assign width = 1946
+                assign widths = '550,750,950,1280,1426,1646,1946'
+                assign sizes = '(max-width:777px) 100vw, (min-width:778px) 100vw, 100vw'
+
+                render 'global-img' img: img, width: width, widths: widths, sizes: sizes
+            elsif section.settings.logoSVG != empty
+                echo section.settings.logoSVG
+            endif
+        -%}
+        {%- if section.settings.url != nil -%}</a>{%- endif -%}
+        </x-cell>
+    </x-flex>
+</section>
+
+{% schema %}
+{
+  "name": "Hero logo",
+  "disabled_on": { "groups": ["aside"] },
+  "presets": [ { "name": "Hero logo" } ],
+  "settings": [
+    {
+        "type": "image_picker",
+        "id": "logo",
+        "label": "Image"
+    },
+    {
+        "type": "textarea",
+        "id": "logoSVG",
+        "label": "SVG",
+        "info": "SVG code only. If an image is selected, this SVG settings will be overridden."
+    },
+    {
+        "type": "range",
+        "label": "Logo size",
+        "id": "size",
+        "min": 10,
+        "max": 100,
+        "step": 5,
+        "unit": "%",
+        "default": 95
+    },
+    {
+        "type": "text_alignment",
+        "id": "alignment",
+        "label": "Align",
+        "default": "center"
+     },
+     {
+        "type": "url",
+        "id": "url",
+        "label": "Link"
+    },
+    {
+        "type": "header",
+        "content": "Spacing"
+    },
+    {
+        "type": "range",
+        "label": "Top",
+        "id": "paddingStart",
+        "min": 0,
+        "max": 50,
+        "step": 5,
+        "unit": "%",
+        "default": 0
+    },
+    {
+        "type": "range",
+        "label": "Bottom",
+        "id": "paddingEnd",
+        "min": 0,
+        "max": 50,
+        "step": 5,
+        "unit": "%",
+        "default": 0
+    }
+  ]
+}
+{% endschema %}

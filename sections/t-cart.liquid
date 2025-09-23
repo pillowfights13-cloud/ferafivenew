@@ -1,0 +1,46 @@
+{%- render 'c-cart', location: 'page', blocks: section.blocks -%}
+
+{% schema %}
+{
+  "name": "Cart page",
+  "settings": [ ],
+  "blocks": [
+    {
+        "type": "@app"
+    },
+    {
+      "type": "liquid",
+      "name": "Custom Liquid",
+      "settings": [
+        {
+          "type": "liquid",
+          "id": "liquid",
+          "label": "Custom Liquid"
+        }
+      ]
+    },
+    {
+        "type": "checkbox",
+        "name": "Checkbox",
+        "settings": [
+          {
+            "type": "inline_richtext",
+            "id": "text",
+            "label": "Text",
+            "info": "Leave this blank to use the global default text. To customize default text, [learn more](https://docs.ferafive.com/themes/ferafive/kb/cart/#cart-terms-checkbox)."
+          },
+          {
+            "type": "checkbox",
+            "id": "requiredInputCheckbox",
+            "label": "Required input",
+            "info": "Make the input required",
+            "default": true
+          }
+        ]
+    }
+  ],
+  "enabled_on": {
+    "templates": ["cart"]
+  }
+}
+{% endschema %}
