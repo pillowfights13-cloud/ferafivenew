@@ -24,7 +24,7 @@
         "image"
       ],
       "settings": {
-        "heroHeight": "var(--heroHeight-f)",
+        "heroHeight": "var(--heroHeight-l)",
         "cropVideo": false,
         "title": "Instant Radiance",
         "content": "Broad spectrum SPF 50 sunscreen",
