@@ -64,14 +64,11 @@
             "checked": true
           }
         },
-        "collapsible_tab": {
-          "type": "collapsible_tab",
+        "popup_neJkJ8": {
+          "type": "popup",
           "settings": {
-            "heading": "Collapsible tab",
-            "checked": true,
-            "content": "",
-            "page": "",
-            "liquid": ""
+            "link_label": "Product In depth Details",
+            "page": ""
           }
         }
       },
@@ -84,7 +81,7 @@
         "buy_buttons",
         "share",
         "description",
-        "collapsible_tab"
+        "popup_neJkJ8"
       ],
       "settings": {
         "pinSection": "media",
