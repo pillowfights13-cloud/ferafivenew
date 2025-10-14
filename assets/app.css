@@ -1609,18 +1609,47 @@ section.faq x-cell:nth-child(3n) { border-inline-end:none }
 [dir="rtl"] select { padding-inline-start: 53px }
 
 
+ @font-face {
+    font-family: 'Qurova';
+    src: url('{{ "Qurova-Light.woff" | asset_url }}') format('woff');
+    font-weight: 300; /* Light */
+    font-style: normal;
+  }
+
   @font-face {
     font-family: 'Qurova';
     src: url('{{ "Qurova-Regular.woff" | asset_url }}') format('woff');
-    font-weight: normal; /* Corresponds to Qurova-Regular.woff */
+    font-weight: 400; /* Regular */
+    font-style: normal;
+  }
+
+  @font-face {
+    font-family: 'Qurova';
+    src: url('{{ "Qurova-Medium.woff" | asset_url }}') format('woff');
+    font-weight: 500; /* Medium */
+    font-style: normal;
+  }
+
+  @font-face {
+    font-family: 'Qurova';
+    src: url('{{ "Qurova-SemiBold.woff" | asset_url }}') format('woff');
+    font-weight: 600; /* SemiBold */
     font-style: normal;
   }
 
   @font-face {
     font-family: 'Qurova';
     src: url('{{ "Qurova-Bold.woff" | asset_url }}') format('woff');
-    font-weight: bold; /* Corresponds to Qurova-Bold.woff */
+    font-weight: 700; /* Bold */
     font-style: normal;
   }
 
   /*
+    Apply "Qurova" font to all Headings and Text
+    ----------------------------------------------
+    This rule targets common text and heading elements to apply your custom font.
+    The "!important" flag helps to ensure this style overrides your theme's default fonts.
+  */
+  h1, h2, h3, h4, h5, h6, p, a, li, span, div {
+    font-family: 'Qurova', sans-serif !important;
+  }
