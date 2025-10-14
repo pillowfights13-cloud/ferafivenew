@@ -52,14 +52,17 @@
     },
     "gs_marquee_rytrfX": {
       "type": "gs-marquee",
+      "custom_css": [
+        ".red-letter {color: red; display: inline;}"
+      ],
       "settings": {
-        "marqueeText": "✨ Discover perfumes capsule collection ✨",
+        "marqueeText": "f<span>e</span>raf<span>i</span>ve",
         "marqueeLink": "",
         "marqueeDirection": "true",
         "marqueeSpeeds": 60,
         "marqueePause": true,
-        "size": 16,
-        "sizeMob": 14,
+        "size": 20,
+        "sizeMob": 17,
         "marqueeBg": "#ffffff",
         "marqueeColor": "#000000"
       }
