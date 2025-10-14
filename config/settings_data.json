@@ -50,7 +50,7 @@
     "cardGridCol-m": "3",
     "cardGridCol-s": "1",
     "cardTypeOf": "overlay",
-    "cardRatio": "landscape",
+    "cardRatio": "portrait",
     "cardImgCrop": "wide",
     "cardHoverImg": false,
     "cardImgRadius": false,
