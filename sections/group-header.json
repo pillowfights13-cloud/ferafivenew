@@ -33,7 +33,7 @@
           "type": "menuLinks",
           "settings": {
             "main_linklist": "main-menu",
-            "navigationAlignment": "center",
+            "navigationAlignment": "flex-start",
             "navigationDropdownAlignment": "auto"
           }
         },
