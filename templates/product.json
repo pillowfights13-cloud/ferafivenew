@@ -68,7 +68,7 @@
           "type": "popup",
           "settings": {
             "link_label": "Product In depth Details",
-            "page": ""
+            "page": "{{ product.metafields.custom.product_details_page.value }}"
           }
         }
       },
