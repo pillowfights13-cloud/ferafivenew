@@ -72,7 +72,7 @@
         "hasIcons": false,
         "accountLinkMob": true,
         "homeOverlay": false,
-        "bgFill": "transparent",
+        "bgFill": "solid",
         "overlayBgColor": "#ffffff",
         "overlayTextColor": "#000000",
         "overlayBorderColor": "#000000"
