@@ -1607,3 +1607,20 @@ section.faq x-cell:nth-child(3n) { border-inline-end:none }
 /* RTL fixes */
 [dir="rtl"] .disclosure__list { right: initial; left: 0 }
 [dir="rtl"] select { padding-inline-start: 53px }
+
+
+  @font-face {
+    font-family: 'Qurova';
+    src: url('{{ "Qurova-Regular.woff" | asset_url }}') format('woff');
+    font-weight: normal; /* Corresponds to Qurova-Regular.woff */
+    font-style: normal;
+  }
+
+  @font-face {
+    font-family: 'Qurova';
+    src: url('{{ "Qurova-Bold.woff" | asset_url }}') format('woff');
+    font-weight: bold; /* Corresponds to Qurova-Bold.woff */
+    font-style: normal;
+  }
+
+  /*
