@@ -56,7 +56,7 @@
         ".red-letter {color: red; display: inline;}"
       ],
       "settings": {
-        "marqueeText": "f<span class=\"red-letter\">e</span>raf<span class=\"red-letter\">i</span>ve",
+        "marqueeText": "f<span class=\"red-letter\">é</span>raf<span class=\"red-letter\">i</span>ve",
         "marqueeLink": "",
         "marqueeDirection": "true",
         "marqueeSpeeds": 60,
