@@ -53,7 +53,7 @@
           "settings": {
             "accountLink": true,
             "searchBar": true,
-            "show_country": false,
+            "show_country": true,
             "show_language": false,
             "accountsAlignment": "flex-end"
           }
