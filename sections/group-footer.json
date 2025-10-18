@@ -38,7 +38,7 @@
         "menu_bMxLt3": {
           "type": "menu",
           "settings": {
-            "menu": "footer",
+            "menu": "policy",
             "alignment": "start",
             "alignmentMobile": "start",
             "multicolumn": true,
