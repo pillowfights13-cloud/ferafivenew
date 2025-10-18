@@ -35,6 +35,16 @@
             "fullwidth": false
           }
         },
+        "menu_bMxLt3": {
+          "type": "menu",
+          "settings": {
+            "menu": "footer",
+            "alignment": "start",
+            "alignmentMobile": "start",
+            "multicolumn": true,
+            "fullwidth": false
+          }
+        },
         "newsletter_8mRW6B": {
           "type": "newsletter",
           "settings": {
@@ -55,6 +65,7 @@
       "block_order": [
         "motto",
         "menu",
+        "menu_bMxLt3",
         "newsletter_8mRW6B",
         "socials"
       ],
