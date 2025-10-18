@@ -19,7 +19,7 @@
         "marqueeMarquee": true,
         "notice": "Free shipping on all orders over ₹5000",
         "link": "",
-        "marqueeDirection": "false",
+        "marqueeDirection": "true",
         "marqueeSpeeds": 40,
         "marqueePause": true,
         "marqueeBg": "#000000",
