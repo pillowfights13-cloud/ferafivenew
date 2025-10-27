@@ -21,7 +21,7 @@
         "motto": {
           "type": "motto",
           "settings": {
-            "motto": "<p>Use this to add additional information about your business, e.g. address, opening hours etc.</p>",
+            "motto": "<p><strong>Address: </strong>L-60 Kalka Ji, New Delhi - 110044</p><p><strong>Legal Name</strong>:<br/>FOSL FILMS (OPC) PRIVATE LIMITED</p><p><strong>OUR MAIL</strong>: <a href=\"mailto:customercare.carrycity@gmail.com\" title=\"mailto:customercare.carrycity@gmail.com\">customercare.carrycity@gmail.com</a></p><p><strong>OUR CONTACT</strong>: <a href=\"https://api.whatsapp.com/send/?phone=7048911089&text&type=phone_number&app_absent=0\" title=\"https://api.whatsapp.com/send/?phone=7048911089&text&type=phone_number&app_absent=0\">+91 7048911089</a></p>",
             "fullwidth": false
           }
         },
