@@ -67,7 +67,7 @@
       "custom_css": [],
       "settings": {
         "headerPosition": true,
-        "hasBorder": true,
+        "hasBorder": false,
         "outlinedLinks": false,
         "openOnHover": true,
         "hasIcons": false,
