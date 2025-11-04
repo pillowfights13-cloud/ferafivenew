@@ -39,6 +39,12 @@
             "size_chart": ""
           }
         },
+        "qty_PYJhWK": {
+          "type": "qty",
+          "settings": {
+            "label": true
+          }
+        },
         "buy_buttons": {
           "type": "buy_buttons",
           "settings": {
@@ -78,6 +84,7 @@
         "subtitle",
         "price",
         "variant_picker",
+        "qty_PYJhWK",
         "buy_buttons",
         "share",
         "description",
