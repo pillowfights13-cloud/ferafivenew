@@ -71,6 +71,42 @@
         "trustbadge_GpU644": {
           "type": "trustbadge",
           "settings": {}
+        },
+        "collapsible_tab_8nJYKi": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "What it is",
+            "checked": true,
+            "content": "<p>An eau de parfum inspired by the beach, this best-selling fragrance captures the atmosphere and essence of summer.</p><p>Paraben-free; phthalate-free; sulfate-free; sulfite-free; gluten-free; free of animal derived ingredients</p>",
+            "page": ""
+          }
+        },
+        "collapsible_tab_V8J7XK": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "How it works",
+            "checked": false,
+            "content": "<p>Designed with a lightly intoxicating blend of sand jasmine, sea spray, and mandarin, this fragrance is wearable anytime, anywhere.</p>",
+            "page": ""
+          }
+        },
+        "collapsible_tab_YDWECr": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "How to use",
+            "checked": false,
+            "content": "<p>Spray on pulse points. Refresh as desired.</p>",
+            "page": ""
+          }
+        },
+        "collapsible_tab_tDRyDB": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "Ingredients",
+            "checked": false,
+            "content": "<p><strong>Top Notes:</strong> Pear, Melon, Mandarin, Orange Oil, Bergamot</p><p><strong>Heart Notes:</strong> Jasmine, Lily of the Valley, Orchid, Rose</p><p><strong>Base Notes:</strong> Vanilla, Blackberry, Musk</p>",
+            "page": ""
+          }
         }
       },
       "block_order": [
@@ -82,7 +118,11 @@
         "paymenticons_NGjtgB",
         "variant_picker_3JjjAi",
         "buy_buttons_PRFP4V",
-        "trustbadge_GpU644"
+        "trustbadge_GpU644",
+        "collapsible_tab_8nJYKi",
+        "collapsible_tab_V8J7XK",
+        "collapsible_tab_YDWECr",
+        "collapsible_tab_tDRyDB"
       ],
       "name": "Featured product",
       "settings": {
