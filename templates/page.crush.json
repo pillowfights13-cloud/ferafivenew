@@ -133,7 +133,8 @@
         "collapsible_tab_tDRyDB"
       ],
       "custom_css": [
-        ".title .h1 {font-size: 25px;}"
+        ".title .h1 {font-size: 25px;}",
+        ".loadmore{display: none;}"
       ],
       "name": "Featured product",
       "settings": {
