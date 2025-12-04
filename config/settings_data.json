@@ -30,6 +30,7 @@
     "boxColor": "#000000",
     "boxBorderColor": "#000000",
     "bodyFontFamily": "inter_n4",
+    "fontSize": 110,
     "headingsFontFamily": "inter_n4",
     "hSize": 100,
     "favicon": "shopify://shop_images/favicon.webp",
@@ -75,7 +76,14 @@
     "boxBorderHover": "#000000",
     "newsletterpopupBg": "#FFFFFF",
     "newsletterpopupColor": "#000000",
-    "content_for_index": []
+    "content_for_index": [],
+    "blocks": {
+      "3557650678667880288": {
+        "type": "shopify://apps/razorpay-cod-magic-checkout/blocks/magicx-script/c13c688d-5c45-4054-b95f-1edd63faa705",
+        "disabled": false,
+        "settings": {}
+      }
+    }
   },
   "installed_preset_name": "ferafive",
   "presets": {
