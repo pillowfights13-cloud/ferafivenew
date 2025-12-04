@@ -145,7 +145,7 @@
         "mediaLayout": "row1",
         "mediaLayoutMob": "slider",
         "showThumbnailSlider": true,
-        "showSlideCounter": false,
+        "showSlideCounter": true,
         "imageZoom": true,
         "hideVariants": false,
         "enable_video_autoplay": false,
@@ -183,7 +183,7 @@
             "urlTarget": false,
             "contentPosition": "bottom:0;left:0;",
             "contentAlign": "start",
-            "slideMetaHBg": "#FFFFFF",
+            "slideMetaHBg": "#ffffff",
             "slideMetaHColor": "#000000"
           }
         }
