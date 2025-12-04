@@ -33,14 +33,7 @@
         "price_fenWwB": {
           "type": "price",
           "settings": {
-            "hidePriceSold": false
-          }
-        },
-        "paymenticons_NGjtgB": {
-          "type": "paymenticons",
-          "settings": {
-            "heading": "Secure payments:",
-            "monoPaymentIcons": true
+            "hidePriceSold": true
           }
         },
         "variant_picker_3JjjAi": {
@@ -70,6 +63,12 @@
           "type": "trustbadge",
           "disabled": true,
           "settings": {}
+        },
+        "share_e4MJ8m": {
+          "type": "share",
+          "settings": {
+            "heading": "Share:"
+          }
         },
         "description_mk4HpF": {
           "type": "description",
@@ -121,11 +120,11 @@
         "title_CdELWc",
         "subtitle_9LDgeH",
         "price_fenWwB",
-        "paymenticons_NGjtgB",
         "variant_picker_3JjjAi",
         "qty_gLJqyR",
         "buy_buttons_PRFP4V",
         "trustbadge_GpU644",
+        "share_e4MJ8m",
         "description_mk4HpF",
         "collapsible_tab_8nJYKi",
         "collapsible_tab_V8J7XK",
