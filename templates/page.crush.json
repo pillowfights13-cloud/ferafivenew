@@ -194,44 +194,12 @@
       "name": "Slideshow",
       "settings": {
         "height_desktop": "700px",
-        "height_mobile": "600px",
+        "height_mobile": "100vh",
         "pagination_type": "dots",
         "show_navigation": true,
         "slideshow_type": "slide",
         "slideshow_autoplay": false,
         "slideshow_delay": 5
-      }
-    },
-    "gs_hero_TyCBnV": {
-      "type": "gs-hero",
-      "blocks": {
-        "image_H9pA9t": {
-          "type": "image",
-          "settings": {
-            "imgClickable": false
-          }
-        }
-      },
-      "block_order": [
-        "image_H9pA9t"
-      ],
-      "name": "Hero banner",
-      "settings": {
-        "heroHeight": "var(--heroHeight-f)",
-        "cropVideo": false,
-        "title": "Hero heading",
-        "content": "",
-        "cta": "Shop more",
-        "url": "",
-        "contentPosition": "center between",
-        "contentDirection": "row",
-        "textAlignment": "left",
-        "contentPositionMob": "center between",
-        "contentDirectionMob": "column",
-        "textAlignmentMob": "center",
-        "heroMetaH1Bg": "#ffffff",
-        "heroMetaH1Color": "#000000",
-        "heroMetaH1hasBg": false
       }
     }
   },
@@ -239,7 +207,6 @@
     "main",
     "gs_featured_product_kbWKDK",
     "gs_marquee_ELfwgN",
-    "gs_slideshow_3CyCtG",
-    "gs_hero_TyCBnV"
+    "gs_slideshow_3CyCtG"
   ]
 }
