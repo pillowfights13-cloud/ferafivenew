@@ -152,26 +152,52 @@
         "enable_video_controls": false
       }
     },
-    "gs_hero_text_HCbRjM": {
-      "type": "gs-hero-text",
-      "name": "Hero text",
+    "gs_guarantee_RCF7Aj": {
+      "type": "gs-guarantee",
+      "blocks": {
+        "logo_image_WtUrMq": {
+          "type": "logo_image",
+          "settings": {
+            "heading": "Base",
+            "content": "",
+            "link": ""
+          }
+        },
+        "logo_image_JiAFj9": {
+          "type": "logo_image",
+          "settings": {
+            "heading": "Middle",
+            "content": "",
+            "link": ""
+          }
+        },
+        "logo_image_EFLNNa": {
+          "type": "logo_image",
+          "settings": {
+            "heading": "Ti",
+            "content": "<p>Content goes here.</p>",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "logo_image_WtUrMq",
+        "logo_image_JiAFj9",
+        "logo_image_EFLNNa"
+      ],
+      "name": "Guarantee",
       "settings": {
-        "body": "<h2><strong>She doesn’t follow…She arrives.</strong></h2>",
-        "cta": "",
-        "url": "",
-        "size": 26,
-        "sizeMob": 17,
-        "alignment": "center",
-        "background": "rgba(0,0,0,0)",
-        "color": "#000000",
-        "buttonBg": "#000000",
-        "buttonColor": "#ffffff"
+        "heading": "She doesn’t follow…She arrives.",
+        "headingAlignment": "center",
+        "textAlignment": "left",
+        "headingBg": "#FFFFFF",
+        "headingColor": "#000000"
       }
     }
   },
   "order": [
     "main",
     "gs_featured_product_kbWKDK",
-    "gs_hero_text_HCbRjM"
+    "gs_guarantee_RCF7Aj"
   ]
 }
