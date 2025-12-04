@@ -60,6 +60,12 @@
             "size_chart": ""
           }
         },
+        "qty_gLJqyR": {
+          "type": "qty",
+          "settings": {
+            "label": true
+          }
+        },
         "buy_buttons_PRFP4V": {
           "type": "buy_buttons",
           "settings": {
@@ -117,6 +123,7 @@
         "price_fenWwB",
         "paymenticons_NGjtgB",
         "variant_picker_3JjjAi",
+        "qty_gLJqyR",
         "buy_buttons_PRFP4V",
         "trustbadge_GpU644",
         "collapsible_tab_8nJYKi",
@@ -154,7 +161,7 @@
         "background": "rgba(0,0,0,0)",
         "color": "#000000",
         "buttonBg": "#000000",
-        "buttonColor": "#FFFFFF"
+        "buttonColor": "#ffffff"
       }
     }
   },
