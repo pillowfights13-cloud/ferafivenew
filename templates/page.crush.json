@@ -134,10 +134,10 @@
       "name": "Featured product",
       "settings": {
         "featured_product": "crush-for-her-100ml",
-        "pinSection": "none",
+        "pinSection": "content",
         "mediaColumnWidth": "large",
         "mediaPosition": "3",
-        "mediaLayout": "row1",
+        "mediaLayout": "row2",
         "mediaLayoutMob": "row1",
         "showThumbnailSlider": true,
         "showSlideCounter": true,
