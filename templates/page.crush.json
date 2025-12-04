@@ -140,10 +140,27 @@
         "enable_video_looping": false,
         "enable_video_controls": false
       }
+    },
+    "gs_hero_text_HCbRjM": {
+      "type": "gs-hero-text",
+      "name": "Hero text",
+      "settings": {
+        "body": "<h2><strong>She doesn’t follow…She arrives.</strong></h2>",
+        "cta": "",
+        "url": "",
+        "size": 26,
+        "sizeMob": 17,
+        "alignment": "center",
+        "background": "rgba(0,0,0,0)",
+        "color": "#000000",
+        "buttonBg": "#000000",
+        "buttonColor": "#FFFFFF"
+      }
     }
   },
   "order": [
     "main",
-    "gs_featured_product_kbWKDK"
+    "gs_featured_product_kbWKDK",
+    "gs_hero_text_HCbRjM"
   ]
 }
