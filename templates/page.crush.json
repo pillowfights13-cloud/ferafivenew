@@ -12,6 +12,7 @@
   "sections": {
     "main": {
       "type": "gs-crush",
+      "disabled": true,
       "settings": {}
     },
     "gs_featured_product_kbWKDK": {
@@ -66,6 +67,10 @@
             "show_addtocart_as_primary": false,
             "show_gift_card_recipient": false
           }
+        },
+        "trustbadge_GpU644": {
+          "type": "trustbadge",
+          "settings": {}
         }
       },
       "block_order": [
@@ -76,7 +81,8 @@
         "price_fenWwB",
         "paymenticons_NGjtgB",
         "variant_picker_3JjjAi",
-        "buy_buttons_PRFP4V"
+        "buy_buttons_PRFP4V",
+        "trustbadge_GpU644"
       ],
       "name": "Featured product",
       "settings": {
