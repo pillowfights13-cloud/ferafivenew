@@ -45,6 +45,7 @@
     "predictive_search_enabled": true,
     "cart_dynamicButtons": true,
     "cart_notes": true,
+    "currency_code_enabled": true,
     "cart_free_shipping": false,
     "cardGridCol": "3",
     "cardGridCol-m": "3",
