@@ -43,6 +43,13 @@
             "hidePriceSold": false
           }
         },
+        "paymenticons_NGjtgB": {
+          "type": "paymenticons",
+          "settings": {
+            "heading": "Secure payments:",
+            "monoPaymentIcons": true
+          }
+        },
         "variant_picker_3JjjAi": {
           "type": "variant_picker",
           "settings": {
@@ -67,6 +74,7 @@
         "subtitle_9LDgeH",
         "description_mk4HpF",
         "price_fenWwB",
+        "paymenticons_NGjtgB",
         "variant_picker_3JjjAi",
         "buy_buttons_PRFP4V"
       ],
