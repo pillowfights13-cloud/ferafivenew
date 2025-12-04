@@ -30,14 +30,6 @@
           "type": "subtitle",
           "settings": {}
         },
-        "description_mk4HpF": {
-          "type": "description",
-          "settings": {
-            "heading": "Description",
-            "collapsibleDesc": false,
-            "checked": false
-          }
-        },
         "price_fenWwB": {
           "type": "price",
           "settings": {
@@ -79,11 +71,19 @@
           "disabled": true,
           "settings": {}
         },
+        "description_mk4HpF": {
+          "type": "description",
+          "settings": {
+            "heading": "Description",
+            "collapsibleDesc": true,
+            "checked": true
+          }
+        },
         "collapsible_tab_8nJYKi": {
           "type": "collapsible_tab",
           "settings": {
             "heading": "What it is",
-            "checked": true,
+            "checked": false,
             "content": "<p>An eau de parfum inspired by the beach, this best-selling fragrance captures the atmosphere and essence of summer.</p><p>Paraben-free; phthalate-free; sulfate-free; sulfite-free; gluten-free; free of animal derived ingredients</p>",
             "page": ""
           }
@@ -120,20 +120,20 @@
         "vendor_DpFdMg",
         "title_CdELWc",
         "subtitle_9LDgeH",
-        "description_mk4HpF",
         "price_fenWwB",
         "paymenticons_NGjtgB",
         "variant_picker_3JjjAi",
         "qty_gLJqyR",
         "buy_buttons_PRFP4V",
         "trustbadge_GpU644",
+        "description_mk4HpF",
         "collapsible_tab_8nJYKi",
         "collapsible_tab_V8J7XK",
         "collapsible_tab_YDWECr",
         "collapsible_tab_tDRyDB"
       ],
       "custom_css": [
-        ".title .h1{font-size: 25px}"
+        ".title .h1 {font-size: 25px;}"
       ],
       "name": "Featured product",
       "settings": {
