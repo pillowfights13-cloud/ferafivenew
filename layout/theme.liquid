@@ -80,6 +80,14 @@
     class="t-{{ template.name }} ip{{ settings.imgPadding }}"
     layout-boxed="{{ settings.boxedLayout }}"
     pid="{{ request.path }}">
+
+
+      <!-- Google Tag Manager (noscript) -->
+      <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5VQHNTWF"
+      height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+      <!-- End Google Tag Manager (noscript) -->
+
+
     <a href="#mainContent" class="skip-to-content button is-primary visually-hidden">{{ "general.accessibility.skip_to_text" | t }}</a>
     <component-loader id="app">
       {%- sections 'group-header' -%}
