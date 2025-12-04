@@ -132,6 +132,9 @@
         "collapsible_tab_YDWECr",
         "collapsible_tab_tDRyDB"
       ],
+      "custom_css": [
+        ".title .h1{font-size: 25px}"
+      ],
       "name": "Featured product",
       "settings": {
         "featured_product": "crush-for-her-100ml",
