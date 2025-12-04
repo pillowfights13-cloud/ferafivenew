@@ -20,6 +20,7 @@
       "blocks": {
         "vendor_DpFdMg": {
           "type": "vendor",
+          "disabled": true,
           "settings": {}
         },
         "title_CdELWc": {
@@ -192,11 +193,44 @@
         "headingBg": "#FFFFFF",
         "headingColor": "#000000"
       }
+    },
+    "gs_hero_TyCBnV": {
+      "type": "gs-hero",
+      "blocks": {
+        "image_H9pA9t": {
+          "type": "image",
+          "settings": {
+            "imgClickable": false
+          }
+        }
+      },
+      "block_order": [
+        "image_H9pA9t"
+      ],
+      "name": "Hero banner",
+      "settings": {
+        "heroHeight": "var(--heroHeight-f)",
+        "cropVideo": false,
+        "title": "Hero heading",
+        "content": "",
+        "cta": "Shop more",
+        "url": "",
+        "contentPosition": "center between",
+        "contentDirection": "row",
+        "textAlignment": "left",
+        "contentPositionMob": "center between",
+        "contentDirectionMob": "column",
+        "textAlignmentMob": "center",
+        "heroMetaH1Bg": "#FFFFFF",
+        "heroMetaH1Color": "#000000",
+        "heroMetaH1hasBg": false
+      }
     }
   },
   "order": [
     "main",
     "gs_featured_product_kbWKDK",
-    "gs_guarantee_RCF7Aj"
+    "gs_guarantee_RCF7Aj",
+    "gs_hero_TyCBnV"
   ]
 }
