@@ -134,7 +134,7 @@
       ],
       "custom_css": [
         ".title .h1 {font-size: 25px;}",
-        ".loadmore{display: none;}"
+        ".loadmore {display: none;}"
       ],
       "name": "Featured product",
       "settings": {
@@ -175,6 +175,7 @@
           "type": "slide",
           "settings": {
             "image_desktop": "shopify://shop_images/All_note.jpg",
+            "image_mobile": "shopify://shop_images/All_note.webp",
             "heading": "",
             "desc": "",
             "cta": "",
