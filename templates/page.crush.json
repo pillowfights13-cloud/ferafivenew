@@ -76,6 +76,7 @@
         },
         "trustbadge_GpU644": {
           "type": "trustbadge",
+          "disabled": true,
           "settings": {}
         },
         "collapsible_tab_8nJYKi": {
