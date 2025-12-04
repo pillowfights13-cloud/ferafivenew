@@ -140,7 +140,7 @@
         "mediaLayout": "row2",
         "mediaLayoutMob": "row1",
         "showThumbnailSlider": true,
-        "showSlideCounter": true,
+        "showSlideCounter": false,
         "imageZoom": true,
         "hideVariants": false,
         "enable_video_autoplay": false,
