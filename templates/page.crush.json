@@ -13,9 +13,83 @@
     "main": {
       "type": "gs-crush",
       "settings": {}
+    },
+    "gs_featured_product_kbWKDK": {
+      "type": "gs-featured-product",
+      "blocks": {
+        "vendor_DpFdMg": {
+          "type": "vendor",
+          "settings": {}
+        },
+        "title_CdELWc": {
+          "type": "title",
+          "settings": {}
+        },
+        "subtitle_9LDgeH": {
+          "type": "subtitle",
+          "settings": {}
+        },
+        "description_mk4HpF": {
+          "type": "description",
+          "settings": {
+            "heading": "Description",
+            "collapsibleDesc": false,
+            "checked": false
+          }
+        },
+        "price_fenWwB": {
+          "type": "price",
+          "settings": {
+            "hidePriceSold": false
+          }
+        },
+        "variant_picker_3JjjAi": {
+          "type": "variant_picker",
+          "settings": {
+            "picker_type": "dropdown",
+            "swatch_shape": "none",
+            "show_text": false,
+            "size_chart": ""
+          }
+        },
+        "buy_buttons_PRFP4V": {
+          "type": "buy_buttons",
+          "settings": {
+            "show_dynamic_checkout": true,
+            "show_addtocart_as_primary": false,
+            "show_gift_card_recipient": false
+          }
+        }
+      },
+      "block_order": [
+        "vendor_DpFdMg",
+        "title_CdELWc",
+        "subtitle_9LDgeH",
+        "description_mk4HpF",
+        "price_fenWwB",
+        "variant_picker_3JjjAi",
+        "buy_buttons_PRFP4V"
+      ],
+      "name": "Featured product",
+      "settings": {
+        "featured_product": "",
+        "pinSection": "none",
+        "mediaColumnWidth": "normal",
+        "mediaPosition": "3",
+        "mediaLayout": "row1",
+        "mediaLayoutMob": "row1",
+        "showThumbnailSlider": false,
+        "showSlideCounter": true,
+        "imageZoom": true,
+        "hideVariants": false,
+        "enable_video_autoplay": false,
+        "enable_video_looping": false,
+        "enable_video_controls": false
+      }
     }
   },
   "order": [
-    "main"
+    "main",
+    "gs_featured_product_kbWKDK"
   ]
 }
