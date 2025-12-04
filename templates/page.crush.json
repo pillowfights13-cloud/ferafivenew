@@ -152,46 +152,51 @@
         "enable_video_controls": false
       }
     },
-    "gs_guarantee_RCF7Aj": {
-      "type": "gs-guarantee",
+    "gs_marquee_ELfwgN": {
+      "type": "gs-marquee",
+      "name": "Scrolling text",
+      "settings": {
+        "marqueeText": "Announce something here",
+        "marqueeLink": "",
+        "marqueeDirection": "false",
+        "marqueeSpeeds": 40,
+        "marqueePause": true,
+        "size": 26,
+        "sizeMob": 17,
+        "marqueeBg": "#b3111c",
+        "marqueeColor": "#ffffff"
+      }
+    },
+    "gs_slideshow_3CyCtG": {
+      "type": "gs-slideshow",
       "blocks": {
-        "logo_image_WtUrMq": {
-          "type": "logo_image",
+        "slide_iiw6dK": {
+          "type": "slide",
           "settings": {
-            "heading": "Base",
-            "content": "",
-            "link": ""
-          }
-        },
-        "logo_image_JiAFj9": {
-          "type": "logo_image",
-          "settings": {
-            "heading": "Middle",
-            "content": "",
-            "link": ""
-          }
-        },
-        "logo_image_EFLNNa": {
-          "type": "logo_image",
-          "settings": {
-            "heading": "Top",
-            "content": "",
-            "link": ""
+            "heading": "Slider heading",
+            "desc": "<p>Describe this slider to your customers.</p>",
+            "cta": "Shop more",
+            "url": "",
+            "urlTarget": false,
+            "contentPosition": "bottom:0;left:0;",
+            "contentAlign": "start",
+            "slideMetaHBg": "#FFFFFF",
+            "slideMetaHColor": "#000000"
           }
         }
       },
       "block_order": [
-        "logo_image_WtUrMq",
-        "logo_image_JiAFj9",
-        "logo_image_EFLNNa"
+        "slide_iiw6dK"
       ],
-      "name": "Guarantee",
+      "name": "Slideshow",
       "settings": {
-        "heading": "She doesn’t follow…She arrives.",
-        "headingAlignment": "center",
-        "textAlignment": "left",
-        "headingBg": "#FFFFFF",
-        "headingColor": "#000000"
+        "height_desktop": "700px",
+        "height_mobile": "600px",
+        "pagination_type": "dots",
+        "show_navigation": true,
+        "slideshow_type": "slide",
+        "slideshow_autoplay": false,
+        "slideshow_delay": 5
       }
     },
     "gs_hero_TyCBnV": {
@@ -221,7 +226,7 @@
         "contentPositionMob": "center between",
         "contentDirectionMob": "column",
         "textAlignmentMob": "center",
-        "heroMetaH1Bg": "#FFFFFF",
+        "heroMetaH1Bg": "#ffffff",
         "heroMetaH1Color": "#000000",
         "heroMetaH1hasBg": false
       }
@@ -230,7 +235,8 @@
   "order": [
     "main",
     "gs_featured_product_kbWKDK",
-    "gs_guarantee_RCF7Aj",
+    "gs_marquee_ELfwgN",
+    "gs_slideshow_3CyCtG",
     "gs_hero_TyCBnV"
   ]
 }
