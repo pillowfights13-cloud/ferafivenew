@@ -174,8 +174,8 @@
         "logo_image_EFLNNa": {
           "type": "logo_image",
           "settings": {
-            "heading": "Ti",
-            "content": "<p>Content goes here.</p>",
+            "heading": "Top",
+            "content": "",
             "link": ""
           }
         }
