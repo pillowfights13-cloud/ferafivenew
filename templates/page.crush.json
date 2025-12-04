@@ -138,7 +138,7 @@
         "mediaColumnWidth": "large",
         "mediaPosition": "3",
         "mediaLayout": "row2",
-        "mediaLayoutMob": "row1",
+        "mediaLayoutMob": "slider",
         "showThumbnailSlider": true,
         "showSlideCounter": false,
         "imageZoom": true,
