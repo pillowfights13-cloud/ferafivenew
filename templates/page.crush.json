@@ -8,6 +8,7 @@
  * ------------------------------------------------------------
  */
 {
+  "wrapper": "div.crush-perfume-page",
   "sections": {
     "main": {
       "type": "t-page",
