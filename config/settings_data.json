@@ -87,6 +87,11 @@
         "type": "shopify://apps/pageuni-countdown-timer/blocks/timer-bar-block/e332cd36-66ff-43fa-921e-7882dc60d9b9",
         "disabled": false,
         "settings": {}
+      },
+      "12657775114333427046": {
+        "type": "shopify://apps/essential-countdown-timer/blocks/app_embed/722378e8-5a70-4eae-aa89-9e44e8e9f6de",
+        "disabled": false,
+        "settings": {}
       }
     }
   },
