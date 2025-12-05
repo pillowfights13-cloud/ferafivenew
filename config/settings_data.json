@@ -82,6 +82,11 @@
         "type": "shopify://apps/razorpay-cod-magic-checkout/blocks/magicx-script/c13c688d-5c45-4054-b95f-1edd63faa705",
         "disabled": false,
         "settings": {}
+      },
+      "10138163780171739304": {
+        "type": "shopify://apps/pageuni-countdown-timer/blocks/timer-bar-block/e332cd36-66ff-43fa-921e-7882dc60d9b9",
+        "disabled": false,
+        "settings": {}
       }
     }
   },
