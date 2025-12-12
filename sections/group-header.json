@@ -13,6 +13,7 @@
   "sections": {
     "header_marquee_mRBL7V": {
       "type": "header-marquee",
+      "disabled": true,
       "name": "Announcement bar",
       "settings": {
         "homeOnly": false,
@@ -22,7 +23,7 @@
         "marqueeDirection": "true",
         "marqueeSpeeds": 20,
         "marqueePause": true,
-        "marqueeBg": "#000000",
+        "marqueeBg": "#bb362d",
         "marqueeColor": "#ffffff"
       }
     },
