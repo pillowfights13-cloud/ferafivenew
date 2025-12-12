@@ -16,6 +16,7 @@
           "type": "image",
           "settings": {
             "image": "shopify://shop_images/Ferafive_Website_banner_Christmas_copy.webp",
+            "imageMobile": "shopify://shop_images/Mobile.webp",
             "imgClickable": true
           }
         }
