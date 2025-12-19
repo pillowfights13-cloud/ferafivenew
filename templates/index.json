@@ -138,95 +138,6 @@
         "heroMetaH1hasBg": false
       }
     },
-    "logolist": {
-      "type": "gs-logolist",
-      "blocks": {
-        "logo1": {
-          "type": "logo_image",
-          "settings": {
-            "link": "",
-            "newTab": false
-          }
-        },
-        "logo2": {
-          "type": "logo_image",
-          "settings": {
-            "link": "",
-            "newTab": false
-          }
-        },
-        "logo3": {
-          "type": "logo_image",
-          "settings": {
-            "link": "",
-            "newTab": false
-          }
-        },
-        "logo4": {
-          "type": "logo_image",
-          "settings": {
-            "link": "",
-            "newTab": false
-          }
-        },
-        "logo5": {
-          "type": "logo_image",
-          "settings": {
-            "link": "",
-            "newTab": false
-          }
-        }
-      },
-      "block_order": [
-        "logo1",
-        "logo2",
-        "logo3",
-        "logo4",
-        "logo5"
-      ],
-      "settings": {
-        "heading": "",
-        "headingAlignment": "start",
-        "headingBg": "rgba(0,0,0,0)",
-        "headingColor": "#000000"
-      }
-    },
-    "hero-double": {
-      "type": "gs-hero-double",
-      "blocks": {
-        "banner2": {
-          "type": "image",
-          "settings": {
-            "title": "Nourish the body",
-            "url": "",
-            "contentPosition": "top left",
-            "heroColor": "#ffffff",
-            "heroBg": "#ffffff",
-            "heroHasBg": false
-          }
-        },
-        "banner1": {
-          "type": "image",
-          "settings": {
-            "title": "Don't be afraid of the sun",
-            "url": "",
-            "contentPosition": "top left",
-            "heroColor": "#000000",
-            "heroBg": "#ffffff",
-            "heroHasBg": false
-          }
-        }
-      },
-      "block_order": [
-        "banner2",
-        "banner1"
-      ],
-      "settings": {
-        "perRow": "2",
-        "perRowMob": "1",
-        "uniformMedia": true
-      }
-    },
     "blog": {
       "type": "gs-blog",
       "settings": {
@@ -284,8 +195,6 @@
     "gs_marquee_rytrfX",
     "gs_hero_double_aAhJmV",
     "gs_hero_RfipEd",
-    "logolist",
-    "hero-double",
     "blog",
     "faqs"
   ]
