@@ -112,7 +112,7 @@
         "image_4hkH8n": {
           "type": "image",
           "settings": {
-            "image": "shopify://shop_images/serum-hero.webp",
+            "image": "shopify://shop_images/WhatsApp_Image_2025-12-18_at_00.26.13.jpg",
             "imgClickable": true
           }
         }
@@ -123,9 +123,9 @@
       "settings": {
         "heroHeight": "var(--heroHeight-f)",
         "cropVideo": false,
-        "title": "Hydrating serum",
-        "content": "with Hyaluronic acid & B5",
-        "cta": "Explore",
+        "title": "",
+        "content": "",
+        "cta": "",
         "url": "",
         "contentPosition": "center",
         "contentDirection": "column",
