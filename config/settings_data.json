@@ -44,7 +44,7 @@
     "socialYoutube": "https://www.youtube.com/channel/UCKz-HPhWj5en9AU-cu1OzHQ/",
     "showBreadcrumbs": true,
     "predictive_search_enabled": true,
-    "cart_type": "drawer-side",
+    "cart_type": "drawer",
     "cart_dynamicButtons": true,
     "cart_notes": true,
     "currency_code_enabled": true,
