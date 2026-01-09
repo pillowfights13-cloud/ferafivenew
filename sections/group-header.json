@@ -65,7 +65,9 @@
         "menu",
         "accounts"
       ],
-      "custom_css": [],
+      "custom_css": [
+        "svg{width: 24px; height: 24px;}"
+      ],
       "settings": {
         "headerPosition": true,
         "hasBorder": false,
