@@ -48,7 +48,7 @@
         "homeCollection": "",
         "show_heading": true,
         "howmany": 6,
-        "horizontalScroller": "both"
+        "horizontalScroller": "none"
       }
     },
     "gs_marquee_rytrfX": {
@@ -57,9 +57,9 @@
         ".red-letter {color: red; display: inline;}"
       ],
       "settings": {
-        "marqueeText": "f<span class=\"red-letter\">é</span>raf<span class=\"red-letter\">i</span>ve",
+        "marqueeText": "férafive",
         "marqueeLink": "",
-        "marqueeDirection": "true",
+        "marqueeDirection": "false",
         "marqueeSpeeds": 60,
         "marqueePause": true,
         "size": 20,

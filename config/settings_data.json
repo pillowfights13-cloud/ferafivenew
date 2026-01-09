@@ -53,7 +53,7 @@
     "cardGridCol-m": "3",
     "cardGridCol-s": "1",
     "cardTypeOf": "overlay",
-    "cardRatio": "portrait",
+    "cardRatio": "square",
     "cardImgCrop": "wide",
     "cardHoverImg": false,
     "cardImgRadius": false,
@@ -80,16 +80,6 @@
     "blocks": {
       "3557650678667880288": {
         "type": "shopify://apps/razorpay-cod-magic-checkout/blocks/magicx-script/c13c688d-5c45-4054-b95f-1edd63faa705",
-        "disabled": false,
-        "settings": {}
-      },
-      "10138163780171739304": {
-        "type": "shopify://apps/pageuni-countdown-timer/blocks/timer-bar-block/e332cd36-66ff-43fa-921e-7882dc60d9b9",
-        "disabled": false,
-        "settings": {}
-      },
-      "12657775114333427046": {
-        "type": "shopify://apps/essential-countdown-timer/blocks/app_embed/722378e8-5a70-4eae-aa89-9e44e8e9f6de",
         "disabled": false,
         "settings": {}
       }
