@@ -123,7 +123,8 @@
                 "default": "1",
                 "options": [
                     { "value": "1", "label": "Thin" },
-                    { "value": "2", "label": "Thick" }
+                    { "value": "2", "label": "Thick" },
+                    { "value": "4", "label": "Extra Thick"}
                 ]
             },
             {
