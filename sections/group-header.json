@@ -71,7 +71,7 @@
         "hasBorder": false,
         "outlinedLinks": false,
         "openOnHover": true,
-        "hasIcons": false,
+        "hasIcons": true,
         "accountLinkMob": true,
         "homeOverlay": false,
         "bgFill": "solid",
