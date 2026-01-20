@@ -69,13 +69,6 @@
             "collapsibleDesc": true,
             "checked": true
           }
-        },
-        "popup_neJkJ8": {
-          "type": "popup",
-          "settings": {
-            "link_label": "Product In depth Details",
-            "page": "{{ product.metafields.custom.product_details_page.value }}"
-          }
         }
       },
       "block_order": [
@@ -87,8 +80,7 @@
         "qty_PYJhWK",
         "buy_buttons",
         "share",
-        "description",
-        "popup_neJkJ8"
+        "description"
       ],
       "settings": {
         "pinSection": "content",
