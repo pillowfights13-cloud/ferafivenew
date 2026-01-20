@@ -71,10 +71,10 @@
 {
     "@context": "https://schema.org",
     "@type": "Organization",
-    "name": "FÉRA FIVE",
+    "name": "{{ shop.name | json }}",
     "url": "{{ shop.url }}",
     "logo": "https://ferafive.com/cdn/shop/files/websitelogo.png?v=1760451565&width=400",
-    "description": "FÉRA FIVE is a luxury beauty brand offering premium skincare and fragrance designed as modern rituals of self-possession.",
+    "description": "{{ shop.description | json }}",
     "brand": {
         "@type": "Brand",
         "name": "FÉRA FIVE"
@@ -104,7 +104,7 @@
     "@type": "WebSite",
     "url": "{{ shop.url }}",
     "name": "FÉRA FIVE",
-    "description": "FÉRA FIVE is a luxury beauty brand offering premium skincare and fragrance as modern rituals of self-possession.",
+    "description": "{{ shop.description | json }}",
     "potentialAction": {
         "@type": "SearchAction",
         "target": "{{ shop.url }}/search?q={search_term_string}",
