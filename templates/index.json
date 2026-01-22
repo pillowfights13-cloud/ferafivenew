@@ -129,7 +129,7 @@
         "image_4hkH8n"
       ],
       "settings": {
-        "heroHeight": "var(--heroHeight-f)",
+        "heroHeight": "var(--heroHeight-l)",
         "cropVideo": false,
         "title": "",
         "content": "",
