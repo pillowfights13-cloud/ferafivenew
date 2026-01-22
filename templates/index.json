@@ -9,37 +9,43 @@
  */
 {
   "sections": {
-    "hero": {
-      "type": "gs-hero",
+    "gs_hero_double_nppPdQ": {
+      "type": "gs-hero-double",
       "blocks": {
-        "image": {
+        "image_EQThTa": {
           "type": "image",
           "settings": {
-            "image": "shopify://shop_images/Ferafive_Website_banner_Christmas_copy.webp",
-            "imageMobile": "shopify://shop_images/Mobile1.webp",
-            "imgClickable": true
+            "image": "shopify://shop_images/MOBILE_BANNERS_Most.webp",
+            "title": "",
+            "url": "shopify://products/hydrafusion-moisture",
+            "contentPosition": "top left",
+            "heroColor": "#000000",
+            "heroBg": "#FFFFFF",
+            "heroHasBg": false
+          }
+        },
+        "image_BJFHYi": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/serum.webp",
+            "title": "",
+            "url": "shopify://products/hydrafusion-serum",
+            "contentPosition": "top left",
+            "heroColor": "#000000",
+            "heroBg": "#FFFFFF",
+            "heroHasBg": false
           }
         }
       },
       "block_order": [
-        "image"
+        "image_EQThTa",
+        "image_BJFHYi"
       ],
+      "name": "Hero multicolumn",
       "settings": {
-        "heroHeight": "var(--heroHeight-l)",
-        "cropVideo": false,
-        "title": "",
-        "content": "",
-        "cta": "Shop Now",
-        "url": "",
-        "contentPosition": "bottom left",
-        "contentDirection": "column",
-        "textAlignment": "center",
-        "contentPositionMob": "center between",
-        "contentDirectionMob": "column",
-        "textAlignmentMob": "left",
-        "heroMetaH1Bg": "#000000",
-        "heroMetaH1Color": "#ffffff",
-        "heroMetaH1hasBg": false
+        "perRow": "2",
+        "perRowMob": "1",
+        "uniformMedia": true
       }
     },
     "products": {
@@ -190,7 +196,7 @@
     }
   },
   "order": [
-    "hero",
+    "gs_hero_double_nppPdQ",
     "products",
     "gs_marquee_rytrfX",
     "gs_hero_double_aAhJmV",
