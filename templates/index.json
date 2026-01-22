@@ -44,7 +44,7 @@
       "name": "Hero multicolumn",
       "settings": {
         "perRow": "2",
-        "perRowMob": "1",
+        "perRowMob": "2",
         "uniformMedia": true
       }
     },
