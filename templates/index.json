@@ -106,6 +106,7 @@
         "image_LGdfB3",
         "image_yiQWqa"
       ],
+      "disabled": true,
       "settings": {
         "perRow": "2",
         "perRowMob": "1",
@@ -118,7 +119,8 @@
         "image_4hkH8n": {
           "type": "image",
           "settings": {
-            "image": "shopify://shop_images/WhatsApp_Image_2025-12-18_at_00.26.13.jpg",
+            "image": "shopify://shop_images/perfume_d7b916f4-ea39-495a-8226-e535de7121b3.webp",
+            "imageMobile": "shopify://shop_images/perfume.webp",
             "imgClickable": true
           }
         }
