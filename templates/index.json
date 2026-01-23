@@ -20,7 +20,7 @@
             "url": "shopify://products/hydrafusion-moisture",
             "contentPosition": "top left",
             "heroColor": "#000000",
-            "heroBg": "#FFFFFF",
+            "heroBg": "#ffffff",
             "heroHasBg": false
           }
         },
@@ -32,7 +32,7 @@
             "url": "shopify://products/hydrafusion-serum",
             "contentPosition": "top left",
             "heroColor": "#000000",
-            "heroBg": "#FFFFFF",
+            "heroBg": "#ffffff",
             "heroHasBg": false
           }
         }
@@ -163,24 +163,40 @@
         "template--16602341081330__7a4aeee3-7d7e-4d0e-9884-36f6293fcc27-16704314575b878f9a-0": {
           "type": "question",
           "settings": {
-            "title": "What are your shipping costs",
-            "answer": "<p>Our shipping costs differ depending on where the order is shipping to and how fast it’s getting there. You can check out our delivery options here (under Delivery Times and Costs).</p>",
+            "title": "What makes FÉRA FIVE a luxury skincare brand?",
+            "answer": "<p>FÉRA FIVE combines clean formulations, refined textures, and a philosophy rooted in self-possession rather than spectacle.</p>",
             "expandAnswer": true
           }
         },
         "template--16602341081330__7a4aeee3-7d7e-4d0e-9884-36f6293fcc27-16704314575b878f9a-1": {
           "type": "question",
           "settings": {
-            "title": "Is my country available for shipping?",
-            "answer": "<p>We ship to almost any country in the world including United States, United Kingdom, Canada, Australia, Germany, Italy, France, Spain, although shipping carriers and delivery times may vary. If for some reason we are unable to ship to your country after the order has been placed, you will be receiving a full refund.</p>",
+            "title": "Are FÉRA FIVE products suitable for daily use?",
+            "answer": "<p>Yes, all products are designed for everyday rituals and long-term skin comfort.</p>",
             "expandAnswer": true
           }
         },
         "template--16602341081330__7a4aeee3-7d7e-4d0e-9884-36f6293fcc27-16704314575b878f9a-2": {
           "type": "question",
           "settings": {
-            "title": "When should I use the hair mist?",
-            "answer": "<p>We recommend using it on damp hair after showering and before heat styling to help prevent damage.</p>",
+            "title": "Can Hydrafusion Moisture be used on all skin types?",
+            "answer": "<p>Hydrafusion Moisture is suitable for most skin types seeking lightweight yet deep hydration.</p>",
+            "expandAnswer": true
+          }
+        },
+        "question_KPb3WC": {
+          "type": "question",
+          "settings": {
+            "title": "How should Hydrashot Serum be used?",
+            "answer": "<p>Apply Hydrashot Serum on clean skin, followed by Hydrafusion Moisture to seal in hydration.</p>",
+            "expandAnswer": true
+          }
+        },
+        "question_ghUwMD": {
+          "type": "question",
+          "settings": {
+            "title": "Is Crush For Her suitable for everyday wear?",
+            "answer": "<p>Yes, it is designed as an understated, long-lasting fragrance for daily elegance.</p>",
             "expandAnswer": true
           }
         }
@@ -188,7 +204,9 @@
       "block_order": [
         "template--16602341081330__7a4aeee3-7d7e-4d0e-9884-36f6293fcc27-16704314575b878f9a-0",
         "template--16602341081330__7a4aeee3-7d7e-4d0e-9884-36f6293fcc27-16704314575b878f9a-1",
-        "template--16602341081330__7a4aeee3-7d7e-4d0e-9884-36f6293fcc27-16704314575b878f9a-2"
+        "template--16602341081330__7a4aeee3-7d7e-4d0e-9884-36f6293fcc27-16704314575b878f9a-2",
+        "question_KPb3WC",
+        "question_ghUwMD"
       ],
       "settings": {
         "heading": "Frequently Asked Questions",
