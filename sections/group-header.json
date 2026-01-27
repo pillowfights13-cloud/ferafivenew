@@ -30,6 +30,14 @@
     "header": {
       "type": "header",
       "blocks": {
+        "menu": {
+          "type": "menuLinks",
+          "settings": {
+            "main_linklist": "main-menu",
+            "navigationAlignment": "center",
+            "navigationDropdownAlignment": "auto"
+          }
+        },
         "logo": {
           "type": "logo",
           "settings": {
@@ -38,15 +46,7 @@
             "logoName": "Fera Five",
             "logoFont": "sans_serif_n4",
             "logoFontSize": 15,
-            "logoAlignment": "start"
-          }
-        },
-        "menu": {
-          "type": "menuLinks",
-          "settings": {
-            "main_linklist": "main-menu",
-            "navigationAlignment": "center",
-            "navigationDropdownAlignment": "auto"
+            "logoAlignment": "center"
           }
         },
         "accounts": {
@@ -61,8 +61,8 @@
         }
       },
       "block_order": [
-        "logo",
         "menu",
+        "logo",
         "accounts"
       ],
       "custom_css": [
