@@ -29,7 +29,6 @@ capture SEOTitle
 	# Site name
 	assign escaped_page_title = page_title | escape
 	unless escaped_page_title contains shop.name
-		echo '&nbsp;'
 		if request.page_type != 'password'
 			echo settings.titleSeparatorSEO
 		endif
