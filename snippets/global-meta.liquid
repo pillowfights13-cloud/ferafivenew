@@ -26,13 +26,7 @@ capture SEOTitle
 		echo 'general.meta.page' | t: page: current_page
 	endif 
 
-	# Site name
-	assign escaped_page_title = page_title | escape
-	unless escaped_page_title contains shop.name
-		if request.page_type != 'password'
-			echo settings.titleSeparatorSEO
-		endif
-	endunless
+	
 endcapture 
 
 # Default variables
