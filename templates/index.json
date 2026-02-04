@@ -17,7 +17,7 @@
           "settings": {
             "image": "shopify://shop_images/MOBILE_BANNERS_Most.webp",
             "title": "",
-            "url": "shopify://products/hydrafusion-moisture",
+            "url": "shopify://products/hydrafusion-moisturiser",
             "contentPosition": "top left",
             "heroColor": "#000000",
             "heroBg": "#ffffff",
@@ -82,7 +82,7 @@
           "settings": {
             "image": "shopify://shop_images/WhatsApp_Image_2025-12-17_at_23.12.02.jpg",
             "title": "Moisturiser",
-            "url": "shopify://products/hydrafusion-moisture",
+            "url": "shopify://products/hydrafusion-moisturiser",
             "contentPosition": "top left",
             "heroColor": "#ffffff",
             "heroBg": "#ffffff",
